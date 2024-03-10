@@ -38,8 +38,8 @@ public class User implements UserInterface {
                     "one special character, and be at least 8 characters long."
     )
     private String password;
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     public User() {
@@ -50,6 +50,7 @@ public class User implements UserInterface {
         this.name = name;
         this.surname = surname;
         this.email = email;
+
         this.password = password;
         this.role = role;
     }
