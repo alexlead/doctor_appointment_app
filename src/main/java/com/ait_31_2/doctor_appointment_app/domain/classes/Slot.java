@@ -18,11 +18,11 @@ public class Slot implements SlotInterface {
 
 
     @NotNull
-    @Column(name = "startTime")
+    @Column(name = "time_start")
     private Data startTime;
 
     @NotNull
-    @Column(name = "endTime")
+    @Column(name = "time_end")
     private Data endTime;
 
 
@@ -32,11 +32,13 @@ public class Slot implements SlotInterface {
         this.endTime = endTime;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
 
+    @Override
     public Data getStartTime() {
         return startTime;
     }
@@ -51,20 +53,5 @@ public class Slot implements SlotInterface {
 
     public void setEndTime(Data endTime) {
         this.endTime = endTime;
-    }
-
-    @Override
-    public List<Slot> getAllSlots() {
-        return null;
-    }
-
-    @Override
-    public Slot getSlotById(int id) {
-        return null;
-    }
-
-    @Override
-    public Slot createSlot(Slot slot) {
-        return null;
     }
 }

@@ -1,15 +1,19 @@
 package com.ait_31_2.doctor_appointment_app.domain.interfaces;
 
+import javax.xml.crypto.Data;
 
-import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
-
-import java.util.List;
 
 public interface SlotInterface {
 
-    List<Slot> getAllSlots();
-    Slot getSlotById(int id);
-    Slot createSlot(Slot slot);
+    int getId();
+
+    Data getStartTime();
+
+    void setStartTime(Data startTime);
+
+    Data getEndTime();
+
+    void setEndTime(Data endTime);
 
 }
 
