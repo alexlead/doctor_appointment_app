@@ -5,6 +5,7 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 public interface UserInterface {
 
     int getId();
+    void setId(int id);
     String getName();
     void setName(String name);
     String getSurname();
