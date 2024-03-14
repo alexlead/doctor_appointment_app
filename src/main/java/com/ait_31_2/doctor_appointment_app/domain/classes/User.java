@@ -54,7 +54,6 @@ public class User implements UserInterface {
         this.role = role;
     }
 
-
     @Override
     public int getId() {
         return id;
