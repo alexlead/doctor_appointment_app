@@ -54,9 +54,6 @@ public class User implements UserInterface {
         this.role = role;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @Override
     public int getId() {
