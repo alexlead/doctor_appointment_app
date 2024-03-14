@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 
 import java.sql.Time;
+import java.util.Objects;
 
 
 @Entity
@@ -53,5 +54,27 @@ public class Slot implements SlotInterface {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Slot slot = (Slot) o;
+        return id == slot.id && Objects.equals(startTime, slot.startTime) && Objects.equals(endTime, slot.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, startTime, endTime);
+    }
+
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "id=" + id +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
     }
 }
