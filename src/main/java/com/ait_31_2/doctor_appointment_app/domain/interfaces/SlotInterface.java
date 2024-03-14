@@ -1,19 +1,19 @@
 package com.ait_31_2.doctor_appointment_app.domain.interfaces;
 
-import javax.xml.crypto.Data;
+import java.sql.Time;
 
 
 public interface SlotInterface {
 
     int getId();
 
-    Data getStartTime();
+    Time getStartTime();
 
-    void setStartTime(Data startTime);
+    void setStartTime(Time startTime);
 
-    Data getEndTime();
+    Time getEndTime();
 
-    void setEndTime(Data endTime);
+    void setEndTime(Time endTime);
 
 }
 

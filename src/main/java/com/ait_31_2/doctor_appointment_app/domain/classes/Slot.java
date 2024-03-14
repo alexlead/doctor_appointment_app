@@ -4,8 +4,9 @@ import com.ait_31_2.doctor_appointment_app.domain.interfaces.SlotInterface;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import javax.xml.crypto.Data;
-import java.util.List;
+
+import java.sql.Time;
+
 
 @Entity
 @Table(name = "slot")
@@ -19,14 +20,14 @@ public class Slot implements SlotInterface {
 
     @NotNull
     @Column(name = "time_start")
-    private Data startTime;
+    private Time startTime;
 
     @NotNull
     @Column(name = "time_end")
-    private Data endTime;
+    private Time endTime;
 
 
-    public Slot(int id, Data startTime, Data endTime) {
+    public Slot(int id, Time startTime, Time endTime) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -37,21 +38,20 @@ public class Slot implements SlotInterface {
         return id;
     }
 
-
     @Override
-    public Data getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Data startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public Data getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Data endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 }
