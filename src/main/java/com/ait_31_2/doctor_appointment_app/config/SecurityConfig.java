@@ -27,16 +27,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer ::disable )
                 .authorizeHttpRequests(
                         x -> x
-                                .requestMatchers(HttpMethod.GET, "/profile/{userid}").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.PUT, "/profile/{userid}").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
+                                .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/profile/{userid}").hasAnyRole(
+//                                        "ADMIN","PATIENT","DOCTOR")
+//                                .requestMatchers(HttpMethod.PUT, "/profile/{userid}").hasAnyRole(
+//                                        "ADMIN","PATIENT","DOCTOR")
+//                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").hasAnyRole(
+//                                        "ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasAnyRole(
                                         "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
+
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
                 ).httpBasic(Customizer.withDefaults());
