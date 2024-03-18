@@ -3,6 +3,9 @@ package com.ait_31_2.doctor_appointment_app.services;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
+import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
+import com.ait_31_2.doctor_appointment_app.exception_handling.responses.UserSuccessRegistration;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.services.interfaces.UserServiceInterface;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
@@ -29,10 +32,10 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     @Override
-    public UserDto registerUser(User user) {
+    public void registerUser(User user) throws UserSuccessRegistration  {
         User foundUser = repository.findByUsername(user.getUsername());
         if (foundUser != null) {
-            throw new UsernameNotFoundException("User with this name already exists!");
+            throw new UserAlreadyExistsException("User with this name already exists!");
         }
         user.setId(0);
         user.clearRole();
@@ -41,10 +44,9 @@ public class UserService implements UserServiceInterface {
 
         String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        User newUser = repository.save(user);
-        //TODO как будет выглядеть сообщение об успешной регистрации?
-        UserDto userDto = mapping.mapUserToDto(newUser);
-        return userDto;
+        repository.save(user);
+
+        throw new UserSuccessRegistration("User " + user.getName() + " " + user.getSurname() + " successfully registered!");
     }
 
     @Override
