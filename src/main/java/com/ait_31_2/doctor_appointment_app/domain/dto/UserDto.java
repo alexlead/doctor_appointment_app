@@ -1,11 +1,10 @@
 package com.ait_31_2.doctor_appointment_app.domain.dto;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Objects;
 
-public class UserDto  {
+public class UserDto {
 
     private int id;
     private String name;
@@ -21,6 +20,8 @@ public class UserDto  {
         this.role = role;
     }
 
+    public UserDto() {
+    }
 
     public int getId() {
         return id;

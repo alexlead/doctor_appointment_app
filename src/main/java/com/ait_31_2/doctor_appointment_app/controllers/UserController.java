@@ -17,11 +17,16 @@ public class UserController {
     public UserController(UserService service) {
         this.service = service;
     }
-    //TODO endpoints???
+
 
     @PostMapping("/registration")
     public void register(@RequestBody User user) throws UserSuccessRegistration {
-         service.registerUser(user);
+        service.registerUser(user);
+    }
+
+    @PostMapping("/authorisation/{username}/{password}")
+    public UserDto authorisation(@PathVariable String username, @PathVariable String password) {
+        return service.authorization(username, password);
     }
 
 

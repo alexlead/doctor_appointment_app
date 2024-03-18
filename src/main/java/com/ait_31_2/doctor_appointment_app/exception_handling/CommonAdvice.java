@@ -1,7 +1,7 @@
 package com.ait_31_2.doctor_appointment_app.exception_handling;
 
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UnauthorizedException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
-
 import com.ait_31_2.doctor_appointment_app.exception_handling.responses.UserSuccessRegistration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,13 @@ public class CommonAdvice {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Response> handleException(UnauthorizedException e) {
+        e.printStackTrace();
+        Response response = new Response(e.getMessage());
 
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 
 }
