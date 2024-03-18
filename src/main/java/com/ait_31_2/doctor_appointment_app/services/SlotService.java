@@ -1,8 +1,8 @@
-package com.ait_31_2.doctor_appointment_app.domain.services;
+package com.ait_31_2.doctor_appointment_app.services;
 
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
-import com.ait_31_2.doctor_appointment_app.domain.repositories.SlotRepository;
+import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
 
 import org.springframework.stereotype.Service;
 
