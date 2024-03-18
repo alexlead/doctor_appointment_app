@@ -27,6 +27,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer ::disable )
                 .authorizeHttpRequests(
                         x -> x
+                                .requestMatchers(HttpMethod.GET, "/profile/{userid}").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/profile/{userid}").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/profile/{userid}").hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
@@ -37,7 +40,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasAnyRole(
                                         "ADMIN","PATIENT","DOCTOR")
-
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
                 ).httpBasic(Customizer.withDefaults());
