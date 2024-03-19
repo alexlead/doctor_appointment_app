@@ -1,14 +1,15 @@
 package com.ait_31_2.doctor_appointment_app.domain.classes;
 
-import com.ait_31_2.doctor_appointment_app.repositories.AppointmentRepository;
+import com.ait_31_2.doctor_appointment_app.domain.interfaces.AppointmentInterface;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
-@Table(name = "Appointment")
-public class Appointment{
+@Table(name = "appointment")
+public class Appointment implements AppointmentInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,21 +17,21 @@ public class Appointment{
     private int id;
 
     @Id
-    @NotNull
-    @Column(name = "patientId")
-    private int patientId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "patient_id",nullable = false)
+    private User patientId;
 
 
     @Id
-    @NotNull
-    @Column(name = "doctorId")
-    private int doctorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id",nullable = false)
+    private User doctorId;
 
 
     @Id
-    @NotNull
-    @Column(name = "slotId")
-    private int slotId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "slot_id", nullable = false)
+    private Slot slotId;
 
 
     @NotNull
@@ -39,10 +40,13 @@ public class Appointment{
 
 
     @NotNull
-    @Column(name = "visitComplete")
+    @Column(name = "visit_complete")
     private boolean visitComplete;
 
-    public Appointment(int id, int patientId, int doctorId, int slotId, Date date, boolean visitComplete) {
+    public Appointment() {
+    }
+
+    public Appointment(int id, User patientId, User doctorId, Slot slotId, Date date, boolean visitComplete) {
         this.id = id;
         this.patientId = patientId;
         this.doctorId = doctorId;
@@ -56,27 +60,27 @@ public class Appointment{
     }
 
 
-    public int getPatientId() {
+    public User getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(int patientId) {
+    public void setPatientId(User patientId) {
         this.patientId = patientId;
     }
 
-    public int getDoctorId() {
+    public User getDoctorId() {
         return doctorId;
     }
 
-    public void setDoctorId(int doctorId) {
+    public void setDoctorId(User doctorId) {
         this.doctorId = doctorId;
     }
 
-    public int getSlotId() {
+    public Slot getSlotId() {
         return slotId;
     }
 
-    public void setSlotId(int slotId) {
+    public void setSlotId(Slot slotId) {
         this.slotId = slotId;
     }
 
@@ -94,5 +98,30 @@ public class Appointment{
 
     public void setVisitComplete(boolean visitComplete) {
         this.visitComplete = visitComplete;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        return id == that.id && visitComplete == that.visitComplete && Objects.equals(patientId, that.patientId) && Objects.equals(doctorId, that.doctorId) && Objects.equals(slotId, that.slotId) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, patientId, doctorId, slotId, date, visitComplete);
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", patientId=" + patientId +
+                ", doctorId=" + doctorId +
+                ", slotId=" + slotId +
+                ", date=" + date +
+                ", visitComplete=" + visitComplete +
+                '}';
     }
 }
