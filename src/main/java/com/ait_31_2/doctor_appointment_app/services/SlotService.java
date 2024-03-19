@@ -3,14 +3,12 @@ package com.ait_31_2.doctor_appointment_app.services;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
-
-import org.springframework.stereotype.Service;
+import com.ait_31_2.doctor_appointment_app.services.interfaces.SlotServiceInterface;
 
 import java.util.List;
 
+public class SlotService implements SlotServiceInterface {
 
-@Service
-public class SlotService {
 
     private SlotRepository repository;
 
@@ -18,18 +16,31 @@ public class SlotService {
         this.repository = repository;
     }
 
-    public List<Slot> getAll() {
+
+
+
+    @Override
+    public List<Slot> getAllSlots() {
         return repository.findAll();
     }
 
-    public Slot getById(int id) {
+    @Override
+    public Slot getSlotById(int id) {
         return repository.findById(id).orElse(null);
     }
 
-    public Slot save(Slot slot) {
+    @Override
+    public Slot createSlot(Slot slot) {
         return repository.save(slot);
     }
 
+    @Override
+    public Slot updateSlot(int id, Slot slot) {
+        return null;
+    }
 
+    @Override
+    public void deleteSlot(int id) {
 
+    } 
 }

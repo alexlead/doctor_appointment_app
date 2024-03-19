@@ -24,11 +24,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer ::disable )
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         x -> x
                                 .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/profile/{userid}").hasAnyRole(
+                                .requestMatchers(HttpMethod.POST, "/user/authorisation/{username}/{password}").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/profile/{userid}"authorisation).hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
 //                                .requestMatchers(HttpMethod.PUT, "/profile/{userid}").hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
@@ -36,7 +37,7 @@ public class SecurityConfig {
 //                                        "ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
+                                        "ADMIN", "PATIENT", "DOCTOR")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям

@@ -11,4 +11,5 @@ public interface SlotServiceInterface {
         Slot createSlot(Slot slot);
         Slot updateSlot(int id, Slot slot);
         void deleteSlot(int id);
+
 }
