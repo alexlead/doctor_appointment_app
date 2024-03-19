@@ -2,7 +2,8 @@ package com.ait_31_2.doctor_appointment_app.controllers;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
-import com.ait_31_2.doctor_appointment_app.exception_handling.responses.UserSuccessRegistration;
+import com.ait_31_2.doctor_appointment_app.exception_handling.LoginForm;
+import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +21,17 @@ public class UserController {
 
 
     @PostMapping("/registration")
-    public void register(@RequestBody User user) throws UserSuccessRegistration {
-        service.registerUser(user);
+    public Response register(@RequestBody User user)  {
+        Response response =service.registerUser(user);
+        return response;
     }
 
-    @PostMapping("/authorisation/{username}/{password}")
-    public UserDto authorisation(@PathVariable String username, @PathVariable String password) {
-        return service.authorization(username, password);
+    @PostMapping("/authorisation")
+    public Response authorisation(@RequestBody LoginForm loginForm) {
+        String username = loginForm.getUsername();
+
+        Response response = service.authorization(username,loginForm.getPassword());
+        return response;
     }
 
 
