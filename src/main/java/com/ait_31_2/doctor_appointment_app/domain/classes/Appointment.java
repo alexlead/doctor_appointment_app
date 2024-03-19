@@ -18,13 +18,13 @@ public class Appointment implements AppointmentInterface {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user",nullable = false)
+    @Column(name = "user", nullable = false)
     private User patientId;
 
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user",nullable = false)
+    @JoinColumn(name = "user", nullable = false)
     private User doctorId;
 
 

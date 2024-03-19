@@ -30,6 +30,4 @@ public interface AppointmentInterface {
 
     void setVisitComplete(boolean visitComplete);
 
-
-
 }
