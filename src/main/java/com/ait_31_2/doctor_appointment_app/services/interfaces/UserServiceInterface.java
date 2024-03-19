@@ -3,15 +3,16 @@ package com.ait_31_2.doctor_appointment_app.services.interfaces;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
-import com.ait_31_2.doctor_appointment_app.exception_handling.responses.UserSuccessRegistration;
+import com.ait_31_2.doctor_appointment_app.exception_handling.LoginForm;
+import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface UserServiceInterface extends UserDetailsService {
-    void registerUser(User user) throws UserSuccessRegistration;
+    Response registerUser(User user) ;
 
-    UserDto authorization(String username, String password);
+   Response authorization(String username, String password);
 
     UserDto updateUser(UserDto userDto);
 

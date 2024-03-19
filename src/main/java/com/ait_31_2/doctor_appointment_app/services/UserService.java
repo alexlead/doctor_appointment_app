@@ -3,9 +3,10 @@ package com.ait_31_2.doctor_appointment_app.services;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
+import com.ait_31_2.doctor_appointment_app.exception_handling.LoginForm;
+import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UnauthorizedException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
-import com.ait_31_2.doctor_appointment_app.exception_handling.responses.UserSuccessRegistration;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.services.interfaces.UserServiceInterface;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
@@ -32,7 +33,7 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     @Override
-    public void registerUser(User user) throws UserSuccessRegistration {
+    public Response registerUser(User user)  {
         User foundUser = repository.findByUsername(user.getUsername());
         if (foundUser != null) {
             throw new UserAlreadyExistsException("User with this name already exists!");
@@ -46,20 +47,20 @@ public class UserService implements UserServiceInterface {
         user.setPassword(encodedPassword);
         repository.save(user);
 
-        throw new UserSuccessRegistration("User " + user.getName() + " " + user.getSurname() + " successfully registered!");
+       return   new Response("OK","User " + user.getName() + " " + user.getSurname() + " successfully registered!");
     }
 
     @Transactional
     @Override
-    public UserDto authorization(String username, String password) {
+    public Response authorization(String username, String password) {
 
         User foundUser = repository.findByUsername(username);
 
         if (foundUser == null || !encoder.matches(password, foundUser.getPassword())) {
             throw new UnauthorizedException("Invalid username or password!");
         }
-        UserDto userDto = mapping.mapUserToDto(foundUser);
-        return userDto;
+
+        return new Response("OK","User " + foundUser.getName() + " " + foundUser.getSurname() + " successfully authorized!");
     }
 
 
