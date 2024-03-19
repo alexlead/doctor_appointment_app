@@ -29,6 +29,9 @@ public class SecurityConfig {
                         x -> x
                                 .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/authorisation/{username}/{password}").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/profile/{userid}").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/profile/{userid}").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/profile/{userid}"authorisation).hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
 //                                .requestMatchers(HttpMethod.PUT, "/profile/{userid}").hasAnyRole(
