@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.services;
 
+
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
 import com.ait_31_2.doctor_appointment_app.services.interfaces.SlotServiceInterface;
@@ -7,6 +8,8 @@ import com.ait_31_2.doctor_appointment_app.services.interfaces.SlotServiceInterf
 import java.util.List;
 
 public class SlotService implements SlotServiceInterface {
+
+
     private SlotRepository repository;
 
     public SlotService(SlotRepository repository) {
@@ -39,5 +42,5 @@ public class SlotService implements SlotServiceInterface {
     @Override
     public void deleteSlot(int id) {
 
-    }
+    } 
 }
