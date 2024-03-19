@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.domain.classes;
 
+import com.ait_31_2.doctor_appointment_app.repositories.AppointmentRepository;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Appointment")
-public class Appointment {
+public class Appointment{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
