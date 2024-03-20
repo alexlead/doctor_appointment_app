@@ -3,7 +3,6 @@ package com.ait_31_2.doctor_appointment_app.services;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
-import com.ait_31_2.doctor_appointment_app.exception_handling.LoginForm;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UnauthorizedException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
@@ -33,7 +32,7 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     @Override
-    public Response registerUser(User user)  {
+    public Response registerUser(User user) {
         User foundUser = repository.findByUsername(user.getUsername());
         if (foundUser != null) {
             throw new UserAlreadyExistsException("User with this name already exists!");
@@ -47,7 +46,7 @@ public class UserService implements UserServiceInterface {
         user.setPassword(encodedPassword);
         repository.save(user);
 
-       return   new Response("OK","User " + user.getName() + " " + user.getSurname() + " successfully registered!");
+        return new Response("OK", "User " + user.getName() + " " + user.getSurname() + " successfully registered!");
     }
 
     @Transactional
@@ -60,7 +59,7 @@ public class UserService implements UserServiceInterface {
             throw new UnauthorizedException("Invalid username or password!");
         }
 
-        return new Response("OK","User " + foundUser.getName() + " " + foundUser.getSurname() + " successfully authorized!");
+        return new Response("OK", "User " + foundUser.getName() + " " + foundUser.getSurname() + " successfully authorized!");
     }
 
 
@@ -72,6 +71,14 @@ public class UserService implements UserServiceInterface {
     @Override
     public List<UserDto> getAllUser() {
         return repository.findAll()
+                .stream()
+                .map(user -> mapping.mapUserToDto(user))
+                .toList();
+    }
+
+    @Override
+    public List<UserDto> getAllDoctors() {
+        return repository.findAllByRole(2)
                 .stream()
                 .map(user -> mapping.mapUserToDto(user))
                 .toList();

@@ -21,8 +21,8 @@ public class UserController {
 
 
     @PostMapping("/registration")
-    public Response register(@RequestBody User user)  {
-        Response response =service.registerUser(user);
+    public Response register(@RequestBody User user) {
+        Response response = service.registerUser(user);
         return response;
     }
 
@@ -30,7 +30,7 @@ public class UserController {
     public Response authorisation(@RequestBody LoginForm loginForm) {
         String username = loginForm.getUsername();
 
-        Response response = service.authorization(username,loginForm.getPassword());
+        Response response = service.authorization(username, loginForm.getPassword());
         return response;
     }
 
@@ -38,6 +38,11 @@ public class UserController {
     @GetMapping("/all")
     public List<UserDto> getAll() {
         return service.getAllUser();
+    }
+
+    @GetMapping("/doctors")
+    public List<UserDto> getAllDoctors() {
+        return service.getAllDoctors();
     }
 
     @GetMapping("/by_id/{userid}")
