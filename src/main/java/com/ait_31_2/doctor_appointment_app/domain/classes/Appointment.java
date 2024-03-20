@@ -16,19 +16,19 @@ public class Appointment implements AppointmentInterface {
     @Column(name = "id")
     private int id;
 
-    @Id
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user", nullable = false)
+    @Column(name = "patient_id", nullable = false)
     private User patientId;
 
 
-    @Id
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", nullable = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
     private User doctorId;
 
 
-    @Id
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "slot_id", nullable = false)
     private Slot slotId;
