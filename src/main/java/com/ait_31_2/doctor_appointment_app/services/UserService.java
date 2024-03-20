@@ -85,9 +85,16 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+    public UserDto getDoctorByName(String surname) {
+        User doctor = repository.findUserByNameAndRole(surname,2);
+         return mapping.mapUserToDto(doctor);
+    }
+
+    @Override
     public List<UserDto> getUserByRole(Role role) {
         return null;
     }
+
 
     @Override
     public UserDto getUserById(int id) {

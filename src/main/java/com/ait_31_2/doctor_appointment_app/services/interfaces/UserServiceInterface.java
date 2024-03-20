@@ -18,6 +18,7 @@ public interface UserServiceInterface extends UserDetailsService {
 
     List<UserDto> getAllUser();
     List<UserDto>getAllDoctors();
+    UserDto getDoctorByName(String surname);
 
     List<UserDto> getUserByRole(Role role);
 
