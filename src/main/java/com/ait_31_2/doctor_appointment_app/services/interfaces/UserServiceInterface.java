@@ -17,6 +17,7 @@ public interface UserServiceInterface extends UserDetailsService {
     UserDto updateUser(UserDto userDto);
 
     List<UserDto> getAllUser();
+    List<UserDto>getAllDoctors();
 
     List<UserDto> getUserByRole(Role role);
 
