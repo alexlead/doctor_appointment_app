@@ -4,8 +4,10 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.DoctorNotFoundException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UnauthorizedException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserNotFoundException;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.services.interfaces.UserServiceInterface;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -63,10 +66,7 @@ public class UserService implements UserServiceInterface {
     }
 
 
-    @Override
-    public UserDto updateUser(UserDto userDto) {
-        return null;
-    }
+
 
     @Override
     public List<UserDto> getAllUser() {
@@ -78,7 +78,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public List<UserDto> getAllDoctors() {
-        return repository.findAllByRole(2)
+        return repository.findAllByRole("ROLE_DOCTOR")
                 .stream()
                 .map(user -> mapping.mapUserToDto(user))
                 .toList();
@@ -86,24 +86,38 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public UserDto getDoctorByName(String surname) {
-        User doctor = repository.findUserByNameAndRole(surname,2);
+        User doctor = repository.findUserByNameAndRole(surname,"ROLE_DOCTOR");
+        if (doctor==null){
+            throw new DoctorNotFoundException("No doctor with that surname was found!");
+        }
          return mapping.mapUserToDto(doctor);
     }
 
     @Override
-    public List<UserDto> getUserByRole(Role role) {
-        return null;
+    public List<UserDto> getPatientByName(String partName) {
+        return repository.findUserByPartName(partName)
+                .stream()
+                .map(user -> mapping.mapUserToDto(user))
+                .toList();
+    }
+
+    @Override
+    public List<UserDto> getUserByRole(String role) {
+        return repository.findAllByRole(role)
+                .stream()
+                .map(user -> mapping.mapUserToDto(user))
+                .toList();
     }
 
 
     @Override
     public UserDto getUserById(int id) {
         User user = repository.findById(id).orElse(null);
-        if (user != null) {
-            return mapping.mapUserToDto(user);
+        if (user == null) {
+            throw new UserNotFoundException("User not found!");
         }
 
-        return null;
+        return mapping.mapUserToDto(user);
     }
 
     //Spring security
