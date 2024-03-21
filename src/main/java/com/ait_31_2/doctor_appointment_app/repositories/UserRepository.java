@@ -11,7 +11,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByUsername(String username);
 
-    @Query(value = "SELECT * FROM doctor_appointment_system.user where (role_id = :role);", nativeQuery = true)
-    List<User> findAllByRole(@Param("role") int role);
+    @Query(value = "SELECT u.* FROM doctor_appointment_system.user u JOIN role r ON u.role_id = r.id WHERE (r.rolename = :rolename);", nativeQuery = true)
+    List<User> findAllByRole( @Param("rolename") String rolename);
+    @Query(value = "SELECT u.* FROM doctor_appointment_system.user u JOIN role r ON u.role_id = r.id WHERE (u.surname = :surname) AND (r.rolename = :rolename);", nativeQuery = true)
+    User findUserByNameAndRole(@Param ("surname") String surname, @Param("rolename") String rolename);
+    //@Query(value = "SELECT u.* FROM doctor_appointment_system.user WHERE (u.surname LIKE %:partName%)  LIMIT 5 ;")
+    @Query(value = "SELECT * FROM doctor_appointment_system.user WHERE (surname LIKE %:partName%)  LIMIT 5 ;", nativeQuery = true)
+    List<User> findUserByPartName(@Param("partName") String partName);
 
 }

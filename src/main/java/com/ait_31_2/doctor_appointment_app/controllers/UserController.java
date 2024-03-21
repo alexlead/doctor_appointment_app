@@ -45,6 +45,16 @@ public class UserController {
         return service.getAllDoctors();
     }
 
+    @GetMapping("/doctor_name/{surname}")
+    public UserDto getDoctor(@PathVariable String surname) {
+        return service.getDoctorByName(surname);
+    }
+
+    @GetMapping("/patient_name/{partName}")
+    public List<UserDto> getPatient(@PathVariable String partName){
+        return  service.getPatientByName(partName);
+    }
+
     @GetMapping("/by_id/{userid}")
     public UserDto getById(@PathVariable int userid) {
         return service.getUserById(userid);
