@@ -11,14 +11,18 @@ import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserNot
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.services.interfaces.UserServiceInterface;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -26,6 +30,8 @@ public class UserService implements UserServiceInterface {
     private UserRepository repository;
     private UserMappingService mapping;
     private BCryptPasswordEncoder encoder;
+    @Autowired
+    private HttpServletRequest request;
 
     public UserService(UserRepository repository, UserMappingService mapping, BCryptPasswordEncoder encoder) {
         this.repository = repository;
@@ -66,8 +72,6 @@ public class UserService implements UserServiceInterface {
     }
 
 
-
-
     @Override
     public List<UserDto> getAllUser() {
         return repository.findAll()
@@ -86,11 +90,11 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public UserDto getDoctorByName(String surname) {
-        User doctor = repository.findUserByNameAndRole(surname,"ROLE_DOCTOR");
-        if (doctor==null){
+        User doctor = repository.findUserByNameAndRole(surname, "ROLE_DOCTOR");
+        if (doctor == null) {
             throw new DoctorNotFoundException("No doctor with that surname was found!");
         }
-         return mapping.mapUserToDto(doctor);
+        return mapping.mapUserToDto(doctor);
     }
 
     @Override
@@ -120,6 +124,22 @@ public class UserService implements UserServiceInterface {
         return mapping.mapUserToDto(user);
     }
 
+    @Override
+    public Response logout() {
+
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) {
+                new SecurityContextLogoutHandler().logout(request, null, auth);
+            }
+            return new Response("OK", "Logout successful!");
+        } catch (Exception e) {
+
+            return new Response("ERROR", "Logout failed! ");
+        }
+    }
+
+
     //Spring security
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -131,4 +151,6 @@ public class UserService implements UserServiceInterface {
         return user;
 
     }
+
+
 }
