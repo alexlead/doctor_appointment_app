@@ -32,7 +32,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/user/doctors").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/user/doctor_name/{surname}")
                                 .hasAnyRole("ADMIN", "PATIENT")
-
                                 .requestMatchers(HttpMethod.GET, "user/patient_name/{partName}")
                                 .hasAnyRole("ADMIN", "DOCTOR")
 //                                .requestMatchers(HttpMethod.GET, "/profile/{userid}"authorisation).hasAnyRole(
@@ -42,12 +41,16 @@ public class SecurityConfig {
 //                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasAnyRole(
-                                        "ADMIN", "PATIENT", "DOCTOR")
+                                .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasRole("ADMIN")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
-                ).httpBasic(Customizer.withDefaults());
+                )
+                .httpBasic(Customizer.withDefaults())
+                .logout((logout) -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                );
         return http.build();
     }
 

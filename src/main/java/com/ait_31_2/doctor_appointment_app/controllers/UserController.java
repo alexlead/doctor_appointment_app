@@ -5,6 +5,9 @@ import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.LoginForm;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +35,12 @@ public class UserController {
 
         Response response = service.authorization(username, loginForm.getPassword());
         return response;
+    }
+
+    @PostMapping("/logout")
+    public Response logout(){
+        Response resp = service.logout();
+        return resp;
     }
 
 
