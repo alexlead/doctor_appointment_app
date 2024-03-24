@@ -8,8 +8,6 @@ public interface SlotServiceInterface {
 
         List<Slot> getAllSlots();
         Slot getSlotById(int id);
-        Slot createSlot(Slot slot);
-        Slot updateSlot(int id, Slot slot);
-        void deleteSlot(int id);
+
 
 }

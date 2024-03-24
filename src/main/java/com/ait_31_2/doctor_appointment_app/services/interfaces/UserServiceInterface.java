@@ -22,7 +22,7 @@ public interface UserServiceInterface extends UserDetailsService {
 
     List<UserDto> getAllDoctors(); // Get All Doctors (Access: Pacient / Unregistered)
 
-    UserDto getDoctorByName(String surname); // Get Doctor By Name (Access: Pacient)
+    UserDto getDoctorByName(String name,String surname); // Get Doctor By Name (Access: Pacient)
 
     List<UserDto> getPatientByName(String partName); // Get Patient By Name ( Access: Doctor / Admin ) - list of Pacient by part of name
 

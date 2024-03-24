@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/authorisation").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/user/doctors").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/user/doctor_name/{surname}")
+                                .requestMatchers(HttpMethod.GET, "/user/doctor_name/{name}/{surname}")
                                 .hasAnyRole("ADMIN", "PATIENT")
                                 .requestMatchers(HttpMethod.GET, "user/patient_name/{partName}")
                                 .hasAnyRole("ADMIN", "DOCTOR")
@@ -42,6 +42,9 @@ public class SecurityConfig {
 //                                        "ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/appointment/free_slots").hasAnyRole("ADMIN","PATIENT","DOCTOR")
+                                .requestMatchers(HttpMethod.GET, "/slot/all").hasAnyRole("ADMIN","PATIENT","DOCTOR")
+
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
