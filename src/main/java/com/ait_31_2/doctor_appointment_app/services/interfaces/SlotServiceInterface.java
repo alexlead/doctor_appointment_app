@@ -9,7 +9,7 @@ public interface SlotServiceInterface {
 
         List<Slot> getAllSlots();
         Slot getSlotById(int id);
-        List<Slot> getAllFreeSlotByDateAndDoctor(Date date, String doctorName, String doctorSurname);
+        List<Slot> getAllFreeSlotByDateAndDoctor(String date, String doctorName, String doctorSurname);
 
 
 }

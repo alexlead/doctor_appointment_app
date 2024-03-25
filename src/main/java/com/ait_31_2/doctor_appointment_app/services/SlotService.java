@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
 @Service
 public class SlotService implements SlotServiceInterface {
 
@@ -21,9 +22,6 @@ public class SlotService implements SlotServiceInterface {
     }
 
 
-
-
-
     @Override
     public List<Slot> getAllSlots() {
         return repository.findAll();
@@ -34,12 +32,10 @@ public class SlotService implements SlotServiceInterface {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Slot> getAllFreeSlotByDateAndDoctor(Date date, String doctorName, String doctorSurname) {
+    public List<Slot> getAllFreeSlotByDateAndDoctor(String date, String doctorName, String doctorSurname) {
         int doctorId = userService.getDoctorByName(doctorName, doctorSurname).getId();
         return repository.findFreeSlotsByDateAndDoctor(date, doctorId);
     }
-
-
 
 
 }

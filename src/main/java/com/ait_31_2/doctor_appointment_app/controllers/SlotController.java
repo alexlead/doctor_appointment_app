@@ -22,7 +22,7 @@ public class SlotController {
 
     @PostMapping("/free_slots")
     public List<Slot> getAllFreeSlot(@RequestBody SlotRequest request) {
-        Date date = request.getDate();
+        String date = request.getDate();
         String name = request.getName();
         String surname = request.getSurname();
         return service.getAllFreeSlotByDateAndDoctor(date,name,surname);
