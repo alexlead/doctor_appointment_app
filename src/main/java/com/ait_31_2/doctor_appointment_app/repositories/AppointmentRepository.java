@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
-    @Query(value = "SELECT  slot.*  FROM slot LEFT JOIN appointment ON slot.id = appointment.slot_id AND (appointment.doctor_id = :doctorId) AND (appointment.date = :date) WHERE appointment.slot_id IS NULL;", nativeQuery = true)
-    List<Slot> findFreeSlotsByDateAndDoctor(@Param("date") Date date, @Param("doctorId") int doctorId);
+
 
 
 }

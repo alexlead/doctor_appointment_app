@@ -20,7 +20,6 @@ public class UserMappingService {
     }
 
 
-
     public User mapUserDtoToEntityUser(UserDto dto) {
         User user = new User();
         user.setName(dto.getName());

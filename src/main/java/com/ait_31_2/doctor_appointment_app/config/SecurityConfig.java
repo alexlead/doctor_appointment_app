@@ -42,7 +42,7 @@ public class SecurityConfig {
 //                                        "ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/appointment/free_slots").hasAnyRole("ADMIN","PATIENT","DOCTOR")
+                                .requestMatchers(HttpMethod.POST, "/slot/free_slots").hasAnyRole("ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/slot/all").hasAnyRole("ADMIN","PATIENT","DOCTOR")
 
 

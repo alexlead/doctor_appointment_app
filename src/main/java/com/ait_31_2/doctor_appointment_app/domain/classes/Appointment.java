@@ -1,6 +1,5 @@
 package com.ait_31_2.doctor_appointment_app.domain.classes;
 
-import com.ait_31_2.doctor_appointment_app.domain.interfaces.AppointmentInterface;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "appointment")
-public class Appointment implements AppointmentInterface {
+public class Appointment  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
