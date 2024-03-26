@@ -1,4 +1,4 @@
-package com.ait_31_2.doctor_appointment_app.exception_handling;
+package com.ait_31_2.doctor_appointment_app.domain;
 
 public class LoginForm {
 

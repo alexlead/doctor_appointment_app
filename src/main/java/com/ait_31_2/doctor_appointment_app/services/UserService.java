@@ -89,10 +89,10 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public UserDto getDoctorByName(String surname) {
-        User doctor = repository.findUserByNameAndRole(surname, "ROLE_DOCTOR");
+    public UserDto getDoctorByName(String name, String surname) {
+        User doctor = repository.findUserByNameAndRole(name, surname, "ROLE_DOCTOR");
         if (doctor == null) {
-            throw new DoctorNotFoundException("No doctor with that surname was found!");
+            throw new DoctorNotFoundException("No doctor with that name was found!");
         }
         return mapping.mapUserToDto(doctor);
     }

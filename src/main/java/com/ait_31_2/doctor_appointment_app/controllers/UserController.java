@@ -2,12 +2,9 @@ package com.ait_31_2.doctor_appointment_app.controllers;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
-import com.ait_31_2.doctor_appointment_app.exception_handling.LoginForm;
+import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public Response logout(){
+    public Response logout() {
         Response resp = service.logout();
         return resp;
     }
@@ -54,14 +51,14 @@ public class UserController {
         return service.getAllDoctors();
     }
 
-    @GetMapping("/doctor_name/{surname}")
-    public UserDto getDoctor(@PathVariable String surname) {
-        return service.getDoctorByName(surname);
+    @GetMapping("/doctor_name/{name}/{surname}")
+    public UserDto getDoctor(@PathVariable String name, @PathVariable String surname) {
+        return service.getDoctorByName(name, surname);
     }
 
     @GetMapping("/patient_name/{partName}")
-    public List<UserDto> getPatient(@PathVariable String partName){
-        return  service.getPatientByName(partName);
+    public List<UserDto> getPatient(@PathVariable String partName) {
+        return service.getPatientByName(partName);
     }
 
     @GetMapping("/by_id/{userid}")
