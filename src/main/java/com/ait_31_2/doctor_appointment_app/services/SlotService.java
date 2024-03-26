@@ -6,7 +6,8 @@ import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
 import com.ait_31_2.doctor_appointment_app.services.interfaces.SlotServiceInterface;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -32,7 +33,7 @@ public class SlotService implements SlotServiceInterface {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Slot> getAllFreeSlotByDateAndDoctor(String date, String doctorName, String doctorSurname) {
+    public List<Slot> getAllFreeSlotByDateAndDoctor(Date date, String doctorName, String doctorSurname) {
         int doctorId = userService.getDoctorByName(doctorName, doctorSurname).getId();
         return repository.findFreeSlotsByDateAndDoctor(date, doctorId);
     }
