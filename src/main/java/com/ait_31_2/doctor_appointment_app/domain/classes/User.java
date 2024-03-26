@@ -37,8 +37,8 @@ public class User implements UserInterface {
     @Column(name = "name")
     @NotNull
     @Pattern(
-            regexp = "^(?=.*[a-zа-я])(?=.*[A-ZА-Я])+$",
-            message = "The name field cannot be empty and can only contain letters."
+            regexp = "[A-ZА-Я][a-zа-я]{2,}",
+            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
     )
     @Schema(
             description = "User`s name",
@@ -48,8 +48,8 @@ public class User implements UserInterface {
     @Column(name = "surname")
     @NotNull
     @Pattern(
-            regexp = "^(?=.*[a-zа-я])(?=.*[A-ZА-Я])+$",
-            message = "The surname field cannot be empty and can only contain letters."
+            regexp = "[A-ZА-Я][a-zа-я]{2,}",
+            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
     )
     @Schema(
             description = "User`s surname",
