@@ -32,7 +32,7 @@ public class UserController {
     )
     public Response register(
             @RequestBody
-            @Parameter(description ="")
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User`s object")
             User user
             ) {
         Response response = service.registerUser(user);
@@ -85,7 +85,11 @@ public class UserController {
             summary = "Find doctor",
             description = "Search for a doctor by full name. Available to registered patients and administration."
     )
-    public UserDto getDoctor(@PathVariable String name, @PathVariable String surname) {
+    public UserDto getDoctor(
+            @PathVariable
+            @Parameter(description ="Doctor`s name")String name,
+            @PathVariable
+            @Parameter(description ="Doctor`s surname")String surname) {
         return service.getDoctorByName(name, surname);
     }
 
