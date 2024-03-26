@@ -3,7 +3,6 @@ package com.ait_31_2.doctor_appointment_app.domain.interfaces;
 import java.sql.Time;
 
 
-
 public interface SlotInterface {
 
     int getId();
