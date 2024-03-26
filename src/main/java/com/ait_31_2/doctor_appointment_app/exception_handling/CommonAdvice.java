@@ -1,9 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.exception_handling;
 
-import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.DoctorNotFoundException;
-import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UnauthorizedException;
-import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
-import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserNotFoundException;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +37,14 @@ public class CommonAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Response> handleException(UserNotFoundException e) {
+        e.printStackTrace();
+        Response response = new Response("ERROR",e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotFreeSlotsException.class)
+    public ResponseEntity<Response> handleException(NotFreeSlotsException e) {
         e.printStackTrace();
         Response response = new Response("ERROR",e.getMessage());
 

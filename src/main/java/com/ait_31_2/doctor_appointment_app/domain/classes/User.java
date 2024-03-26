@@ -2,6 +2,7 @@ package com.ait_31_2.doctor_appointment_app.domain.classes;
 
 import com.ait_31_2.doctor_appointment_app.domain.interfaces.UserInterface;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,24 +19,47 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user")
+@Schema(
+        description = "Class user"
+)
 public class User implements UserInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Schema(
+            description = "Users`s id",
+            example = "13",
+            accessMode = Schema.AccessMode.READ_ONLY
+    )
     private int id;
 
     @Column(name = "name")
     @NotNull
-    @NotEmpty
+    @Pattern(
+            regexp = "^(?=.*[a-zа-я])(?=.*[A-ZА-Я])+$",
+            message = "The name field cannot be empty and can only contain letters."
+    )
+    @Schema(
+            description = "User`s name",
+            example = "Ivan")
     private String name;
 
     @Column(name = "surname")
     @NotNull
-    @NotEmpty
+    @Pattern(
+            regexp = "^(?=.*[a-zа-я])(?=.*[A-ZА-Я])+$",
+            message = "The surname field cannot be empty and can only contain letters."
+    )
+    @Schema(
+            description = "User`s surname",
+            example = "Ivanov")
     private String surname;
 
     @Column(name = "email")
+    @Schema(
+            description = "email, which is a username",
+            example = "iv_ivanjv@gm.com")
     @Email(message = "Incorrect email values are not allowed")
     private String username;
 
@@ -45,9 +69,17 @@ public class User implements UserInterface {
             message = "The password must contain at least one digit, one lowercase and one uppercase letter, " +
                     "one special character, and be at least 8 characters long."
     )
+    @Schema(
+            description = "Password",
+            example = "123S!fghjk")
     private String password;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
+    @Schema(
+            description = "Users`s role",
+            example = "PATIENT",
+            accessMode = Schema.AccessMode.READ_ONLY
+    )
     private Role role;
 
     public User() {
@@ -177,7 +209,7 @@ public class User implements UserInterface {
                 '}';
     }
 
-    public void clearRole(){
+    public void clearRole() {
         this.role = null;
     }
 
