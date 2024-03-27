@@ -19,6 +19,17 @@ public class UserMappingService {
 
     }
 
+    public UserDto mapUserToDtoName(User user) {
+        int id = user.getId();
+        String name = user.getName();
+        String surname = user.getSurname();
+
+        return new UserDto(id, name, surname,null,null);
+
+    }
+
+
+
 
     public User mapUserDtoToEntityUser(UserDto dto) {
         User user = new User();

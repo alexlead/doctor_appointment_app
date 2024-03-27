@@ -1,6 +1,8 @@
 package com.ait_31_2.doctor_appointment_app.domain.dto;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.JoinColumn;
 
 import java.util.Objects;
 
@@ -9,7 +11,9 @@ public class UserDto {
     private int id;
     private String name;
     private String surname;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String username;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Role role;
 
     public UserDto(int id, String name, String surname, String username, Role role) {

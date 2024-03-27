@@ -37,8 +37,8 @@ public class User implements UserInterface {
     @Column(name = "name")
     @NotNull
     @Pattern(
-            regexp = "^(?=.*[a-zа-я])(?=.*[A-ZА-Я])+$",
-            message = "The name field cannot be empty and can only contain letters."
+            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
     )
     @Schema(
             description = "User`s name",
@@ -48,8 +48,8 @@ public class User implements UserInterface {
     @Column(name = "surname")
     @NotNull
     @Pattern(
-            regexp = "^(?=.*[a-zа-я])(?=.*[A-ZА-Я])+$",
-            message = "The surname field cannot be empty and can only contain letters."
+            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
     )
     @Schema(
             description = "User`s surname",
@@ -137,9 +137,9 @@ public class User implements UserInterface {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-        return authorities;
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority(role.getAuthority()));
+        return roles;
     }
 
     @Override

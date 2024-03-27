@@ -84,7 +84,7 @@ public class UserService implements UserServiceInterface {
     public List<UserDto> getAllDoctors() {
         return repository.findAllByRole("ROLE_DOCTOR")
                 .stream()
-                .map(user -> mapping.mapUserToDto(user))
+                .map(user -> mapping.mapUserToDtoName(user))
                 .toList();
     }
 
