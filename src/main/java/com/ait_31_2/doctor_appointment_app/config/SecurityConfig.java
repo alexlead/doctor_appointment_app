@@ -11,10 +11,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
+public class SecurityConfig  {
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -27,7 +28,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         x -> x
-                                .requestMatchers(HttpMethod.GET,"/swagger-ui/***").permitAll()
+
+                                .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/authorisation").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/user/doctors").permitAll()
@@ -50,8 +52,10 @@ public class SecurityConfig {
 
 
 
+
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
                 )
+
                 .httpBasic(Customizer.withDefaults())
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
@@ -60,4 +64,8 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+
 }
+
+
