@@ -21,7 +21,7 @@ public class SlotController {
         return service.getAllSlots();
     }
 
-    @PostMapping("/free_slots")
+    @PostMapping("/free")
     public List<Slot> getAllFreeSlot(@RequestBody SlotRequest request) {
         Date date = request.getDate();
         String name = request.getName();

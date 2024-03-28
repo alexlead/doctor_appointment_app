@@ -80,7 +80,7 @@ public class UserController {
         return service.getAllDoctors();
     }
 
-    @GetMapping("/doctor_name/{name}/{surname}")
+    @GetMapping("/doctor/{name}/{surname}")
     @Operation(
             summary = "Find doctor",
             description = "Search for a doctor by full name. Available to registered patients and administration."
@@ -93,7 +93,7 @@ public class UserController {
         return service.getDoctorByName(name, surname);
     }
 
-    @GetMapping("/patient_name/{partName}")
+    @GetMapping("/patient/{partName}")
     @Operation(
             summary = "Find patient",
             description = "Search for a patient by first letter of name. Available to doctors and administration."
@@ -102,7 +102,7 @@ public class UserController {
         return service.getPatientByName(partName);
     }
 
-    @GetMapping("/by_id/{userid}")
+    @GetMapping("/{userid}")
     @Operation(
             summary = "Find user",
             description = "Search for a user by id. Available to administration."

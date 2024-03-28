@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -36,7 +37,7 @@ public class Appointment  {
 
     @NotNull
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
 
     @NotNull
@@ -46,12 +47,12 @@ public class Appointment  {
     public Appointment() {
     }
 
-    public Appointment(int id, User patientId, User doctorId, Slot slotId, Date date, boolean visitComplete) {
+    public Appointment(int id, User patientId, User doctorId, Slot slotId, LocalDate date, boolean visitComplete) {
         this.id = id;
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.slotId = slotId;
-        this.date = date;
+        this.date =date;
         this.visitComplete = visitComplete;
     }
 
@@ -84,11 +85,11 @@ public class Appointment  {
         this.slotId = slotId;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
