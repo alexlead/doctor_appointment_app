@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 
@@ -15,13 +16,13 @@ public class AppointmentDto {
     private UserDto patientId;
     private UserDto doctorId;
     private Slot slotId;
-    private Date date;
+    private LocalDate date;
     private Boolean visitComplete;
 
     public AppointmentDto() {
     }
 
-    public AppointmentDto(int id, UserDto patientId, UserDto doctorId, Slot slotId, Date date, Boolean visitComplete) {
+    public AppointmentDto(int id, UserDto patientId, UserDto doctorId, Slot slotId, LocalDate date, Boolean visitComplete) {
         this.id = id;
         this.patientId = patientId;
         this.doctorId = doctorId;
@@ -64,11 +65,11 @@ public class AppointmentDto {
         this.slotId = slotId;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

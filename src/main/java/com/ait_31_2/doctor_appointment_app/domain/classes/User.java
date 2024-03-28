@@ -59,7 +59,7 @@ public class User implements UserInterface {
     @Column(name = "email")
     @Schema(
             description = "email, which is a username",
-            example = "iv_ivanjv@gm.com")
+            example = "iv_ivanov@gm.com")
     @Email(message = "Incorrect email values are not allowed")
     private String username;
 

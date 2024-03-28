@@ -10,17 +10,26 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig  {
+@EnableMethodSecurity(securedEnabled = true)
+public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.addPathPrefix("/api", c -> c.isAnnotationPresent(RequestMapping.class));
+    }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,14 +37,16 @@ public class SecurityConfig  {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         x -> x
+                                .requestMatchers("/").permitAll()
 
-                                .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
+
+                                .requestMatchers("/v3/**", "/swagger-ui/**", "swagger-resources","swagger-resources/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/user/authorisation").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/user/doctors").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/user/doctor_name/{name}/{surname}")
+                                .requestMatchers(HttpMethod.GET, "/user/doctor/{name}/{surname}")
                                 .hasAnyRole("ADMIN", "PATIENT")
-                                .requestMatchers(HttpMethod.GET, "user/patient_name/{partName}")
+                                .requestMatchers(HttpMethod.GET, "user/patient/{partName}")
                                 .hasAnyRole("ADMIN", "DOCTOR")
 //                                .requestMatchers(HttpMethod.GET, "/profile/{userid}"authorisation).hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
@@ -44,13 +55,12 @@ public class SecurityConfig  {
 //                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/user/by_id/{userid}").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/slot/free_slots").hasAnyRole("ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.GET, "/slot/all").hasAnyRole("ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.GET, "/appointment/patient/appointments/{patientId}/{timeStart}/{timeEnd}")
-                                .hasRole("PATIENT")
-
-
+                                .requestMatchers(HttpMethod.GET, "/user/{userid}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/slot/free").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
+                                .requestMatchers(HttpMethod.GET, "/slot/all").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
+                                .requestMatchers(HttpMethod.GET, "/appointment/patient/{patientId}/{timeStart}/{timeEnd}").hasRole("PATIENT")
+                                .requestMatchers(HttpMethod.GET, "patient/future/{patientId}").hasRole("PATIENT")
+                                .requestMatchers(HttpMethod.GET, "patient/past/{patientId}").hasRole("PATIENT")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
@@ -63,7 +73,6 @@ public class SecurityConfig  {
                 );
         return http.build();
     }
-
 
 
 }
