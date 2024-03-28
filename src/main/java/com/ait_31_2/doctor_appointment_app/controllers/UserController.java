@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping("/all")
     @Operation(
-            summary = "List of doctors",
+            summary = "List of users",
             description = "View list of all doctors. Available to administration."
     )
     public List<UserDto> getAll() {
@@ -73,8 +73,8 @@ public class UserController {
 
     @GetMapping("/doctors")
     @Operation(
-            summary = "Doctor",
-            description = "View doctor information.Available to all users."
+            summary = "Doctors",
+            description = "View list of all doctors. Available to all users."
     )
     public List<UserDto> getAllDoctors() {
         return service.getAllDoctors();
