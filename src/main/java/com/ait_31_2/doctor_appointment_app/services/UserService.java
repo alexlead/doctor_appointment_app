@@ -9,7 +9,6 @@ import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.Unautho
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserNotFoundException;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
-import com.ait_31_2.doctor_appointment_app.services.interfaces.UserServiceInterface;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements UserServiceInterface {
+public class UserService  {
 
     private UserRepository repository;
     private UserMappingService mapping;
@@ -40,7 +39,6 @@ public class UserService implements UserServiceInterface {
     }
 
     @Transactional
-    @Override
     public Response registerUser(User user) {
         User foundUser = repository.findByUsername(user.getUsername());
         if (foundUser != null) {
@@ -59,7 +57,6 @@ public class UserService implements UserServiceInterface {
     }
 
     @Transactional
-    @Override
     public Response authorization(String username, String password) {
 
         User foundUser = repository.findByUsername(username);
@@ -72,7 +69,7 @@ public class UserService implements UserServiceInterface {
     }
 
 
-    @Override
+
     public List<UserDto> getAllUser() {
         return repository.findAll()
                 .stream()
@@ -80,7 +77,7 @@ public class UserService implements UserServiceInterface {
                 .toList();
     }
 
-    @Override
+
     public List<UserDto> getAllDoctors() {
         return repository.findAllByRole("ROLE_DOCTOR")
                 .stream()
@@ -88,7 +85,7 @@ public class UserService implements UserServiceInterface {
                 .toList();
     }
 
-    @Override
+
     public UserDto getDoctorByName(String name, String surname) {
         User doctor = repository.findUserByNameAndRole(name, surname, "ROLE_DOCTOR");
         if (doctor == null) {
@@ -97,7 +94,7 @@ public class UserService implements UserServiceInterface {
         return mapping.mapUserToDto(doctor);
     }
 
-    @Override
+
     public List<UserDto> getPatientByName(String partName) {
         return repository.findUserByPartName(partName)
                 .stream()
@@ -105,7 +102,7 @@ public class UserService implements UserServiceInterface {
                 .toList();
     }
 
-    @Override
+
     public List<UserDto> getUserByRole(String role) {
         return repository.findAllByRole(role)
                 .stream()
@@ -114,7 +111,7 @@ public class UserService implements UserServiceInterface {
     }
 
 
-    @Override
+
     public UserDto getUserById(int id) {
         User user = repository.findById(id).orElse(null);
         if (user == null) {
@@ -124,7 +121,7 @@ public class UserService implements UserServiceInterface {
         return mapping.mapUserToDto(user);
     }
 
-    @Override
+
     public Response logout() {
 
         try {
@@ -141,7 +138,7 @@ public class UserService implements UserServiceInterface {
 
 
     //Spring security
-    @Override
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repository.findByUsername(username);
 
