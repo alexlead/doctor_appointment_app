@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 @Tag(name = "User controller",
         description = "")
 public class UserController {
@@ -39,30 +39,30 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/authorisation")
-    @Operation(
-            summary = "Authorisation",
-            description = "Signing in to app 'Doctor appointment system'.Available to all users."
-    )
-    public Response authorisation(@RequestBody LoginForm loginForm) {
-        String username = loginForm.getUsername();
+//    @PostMapping("/authorisation")
+//    @Operation(
+//            summary = "Authorisation",
+//            description = "Signing in to app 'Doctor appointment system'.Available to all users."
+//    )
+//    public Response authorisation(@RequestBody LoginForm loginForm) {
+//        String username = loginForm.getUsername();
+//
+//        Response response = service.authorization(username, loginForm.getPassword());
+//        return response;
+//    }
 
-        Response response = service.authorization(username, loginForm.getPassword());
-        return response;
-    }
-
-    @PostMapping("/logout")
-    @Operation(
-            summary = "Logout",
-            description = "Logging out of an account from the 'Doctor appointment system'. Available to registered users."
-    )
-    public Response logout() {
-        Response resp = service.logout();
-        return resp;
-    }
+//    @PostMapping("/logout")
+//    @Operation(
+//            summary = "Logout",
+//            description = "Logging out of an account from the 'Doctor appointment system'. Available to registered users."
+//    )
+//    public Response logout() {
+//        Response resp = service.logout();
+//        return resp;
+//    }
 
 
-    @GetMapping("/all")
+    @GetMapping("/")
     @Operation(
             summary = "List of users",
             description = "View list of all doctors. Available to administration."

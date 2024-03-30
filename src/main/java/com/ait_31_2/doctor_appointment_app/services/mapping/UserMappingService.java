@@ -5,6 +5,8 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class UserMappingService {
 

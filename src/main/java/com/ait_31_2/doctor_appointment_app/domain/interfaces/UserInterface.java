@@ -3,6 +3,8 @@ package com.ait_31_2.doctor_appointment_app.domain.interfaces;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Set;
+
 public interface UserInterface extends UserDetails {
 
     int getId();
@@ -16,5 +18,5 @@ public interface UserInterface extends UserDetails {
     String getPassword();
     void setPassword(String password);
     Role getRole();
-    void setRole(Role role);
+    void setRole(Role roles);
 }

@@ -2,9 +2,9 @@ package com.ait_31_2.doctor_appointment_app.domain.dto;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.JoinColumn;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class UserDto {
 
