@@ -66,9 +66,9 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/api/slots/{data}/{id}").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 //.requestMatchers(HttpMethod.GET, "/api/slots/").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
-                                .requestMatchers(HttpMethod.GET, "/appointment/patient/{patientId}/{timeStart}/{timeEnd}").hasRole("PATIENT")
-                                .requestMatchers(HttpMethod.GET, "patient/future/{patientId}").hasRole("PATIENT")
-                                .requestMatchers(HttpMethod.GET, "patient/past/{patientId}").hasRole("PATIENT")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/{patientId}/{timeStart}/{timeEnd}").hasAnyRole("PATIENT","ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/future/{patientId}").hasAnyRole("PATIENT","ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/past/{patientId}").hasAnyRole("PATIENT","ADMIN")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
