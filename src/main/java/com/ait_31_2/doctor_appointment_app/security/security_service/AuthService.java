@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.security.security_service;
 
+import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.AuthInfo;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
@@ -28,7 +29,7 @@ public class AuthService {
         this.refreshStorage = new HashMap<>();
     }
 
-    public TokenResponseDto login(@Nonnull User inboundUser) throws AuthException {
+    public TokenResponseDto login(@Nonnull LoginForm inboundUser) throws AuthException {
         String username = inboundUser.getUsername();
         User foundUser = (User) userService.loadUserByUsername(username);
 

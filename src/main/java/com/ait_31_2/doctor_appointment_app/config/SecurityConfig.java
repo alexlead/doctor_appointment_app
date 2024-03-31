@@ -26,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig  {
 
     private TokenFilter filter;
 
@@ -50,10 +50,12 @@ public class SecurityConfig implements WebMvcConfigurer {
                         x -> x
 
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/auth/login", "api/auth/refresh","/api/auth/logout").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/users/{userid}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "api/users/").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/auth/logout").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/api/users/doctors").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/auth/login", "api/auth/refresh","/api/auth/logout").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users/doctor/{name}/{surname}")
                                 .hasAnyRole("ADMIN", "PATIENT")
                                 .requestMatchers(HttpMethod.GET, "/api/users/patient/{partName}")
@@ -64,8 +66,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 //                                        "ADMIN","PATIENT","DOCTOR")
 //                                .requestMatchers(HttpMethod.DELETE, "/profile/{userid}").hasAnyRole(
 //                                        "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.GET, "api/users/").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/users/{userid}").hasRole("ADMIN")
+
+
                                 .requestMatchers(HttpMethod.POST, "/slot/free").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/slot/all").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/appointment/patient/{patientId}/{timeStart}/{timeEnd}").hasRole("PATIENT")

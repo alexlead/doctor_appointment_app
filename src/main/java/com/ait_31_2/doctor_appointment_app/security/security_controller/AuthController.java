@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.security.security_controller;
 
+import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.RefreshRequestDto;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
@@ -22,9 +23,9 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> login(@RequestBody User user, HttpServletResponse response) {
+    public ResponseEntity<TokenResponseDto> login(@RequestBody LoginForm loginForm, HttpServletResponse response) {
         try {
-            TokenResponseDto tokenDto = service.login(user);
+            TokenResponseDto tokenDto = service.login(loginForm);
 
             Cookie cookie = new Cookie("Access-Token", tokenDto.getAccessToken());
             cookie.setPath("/");

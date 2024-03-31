@@ -1,6 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.services;
 
-import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
+import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService  {
+public class UserService implements UserDetailsService {
 
     private UserRepository repository;
     private UserMappingService mapping;
@@ -34,18 +35,12 @@ public class UserService  {
     }
 
     @Transactional
-    public Response registerUser(User user) {
-        User foundUser = repository.findByUsername(user.getUsername());
+    public Response registerUser(RegistrationForm form) {
+        User foundUser = repository.findByUsername(form.getUsername());
         if (foundUser != null) {
             throw new UserAlreadyExistsException("User with this name already exists!");
         }
-        user.setId(0);
-        user.clearRole();
-        Role role = new Role(1, "ROLE_PATIENT");
-        user.setRole(role);
-
-        String encodedPassword = encoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+        User user = mapping.mapRegistrationFormToUser(form);
         repository.save(user);
 
         return new Response("OK", "User " + user.getName() + " " + user.getSurname() + " successfully registered!");
@@ -62,7 +57,6 @@ public class UserService  {
 //
 //        return new Response("OK", "User " + foundUser.getName() + " " + foundUser.getSurname() + " successfully authorized!");
 //    }
-
 
 
     public List<UserDto> getAllUser() {
@@ -106,7 +100,6 @@ public class UserService  {
     }
 
 
-
     public UserDto getUserById(int id) {
         User user = repository.findById(id).orElse(null);
         if (user == null) {
@@ -133,7 +126,7 @@ public class UserService  {
 
 
     //Spring security
-
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repository.findByUsername(username);
 

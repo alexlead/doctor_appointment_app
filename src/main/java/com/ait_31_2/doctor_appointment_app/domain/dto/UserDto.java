@@ -14,14 +14,14 @@ public class UserDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String username;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Role role;
+    private Set<Role> roles;
 
-    public UserDto(int id, String name, String surname, String username, Role role) {
+    public UserDto(int id, String name, String surname, String username, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.username = username;
-        this.role = role;
+        this.roles = roles;
     }
 
     public UserDto() {
@@ -60,24 +60,24 @@ public class UserDto {
         this.username = username;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserDto userDto)) return false;
-        return getId() == userDto.getId() && Objects.equals(getName(), userDto.getName()) && Objects.equals(getSurname(), userDto.getSurname()) && Objects.equals(getUsername(), userDto.getUsername()) && Objects.equals(getRole(), userDto.getRole());
+        return getId() == userDto.getId() && Objects.equals(getName(), userDto.getName()) && Objects.equals(getSurname(), userDto.getSurname()) && Objects.equals(getUsername(), userDto.getUsername()) && Objects.equals(getRoles(), userDto.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getSurname(), getUsername(), getRole());
+        return Objects.hash(getId(), getName(), getSurname(), getUsername(), getRoles());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class UserDto {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", username='" + username + '\'' +
-                ", role=" + role +
+                ", role=" + roles +
                 '}';
     }
 }

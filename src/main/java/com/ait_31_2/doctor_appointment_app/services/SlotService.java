@@ -7,6 +7,7 @@ import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,7 +33,7 @@ public class SlotService  {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Slot> getAllFreeSlotByDateAndDoctor(Date date, String doctorName, String doctorSurname) {
+    public List<Slot> getAllFreeSlotByDateAndDoctor(LocalDate date, String doctorName, String doctorSurname) {
         int doctorId = userService.getDoctorByName(doctorName, doctorSurname).getId();
         List<Slot> slots =  repository.findFreeSlotsByDateAndDoctor(date, doctorId);
         if (slots==null){

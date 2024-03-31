@@ -17,6 +17,6 @@ public interface UserInterface extends UserDetails {
     void setUsername(String username);
     String getPassword();
     void setPassword(String password);
-    Role getRole();
-    void setRole(Role roles);
+    Role getRoles();
+    void setRoles(Role roles);
 }

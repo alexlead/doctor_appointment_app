@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class SlotController {
 
     @PostMapping("/free")
     public List<Slot> getAllFreeSlot(@RequestBody SlotRequest request) {
-        Date date = request.getDate();
+       LocalDate date = request.getDate();
         String name = request.getName();
         String surname = request.getSurname();
         return service.getAllFreeSlotByDateAndDoctor(date,name,surname);

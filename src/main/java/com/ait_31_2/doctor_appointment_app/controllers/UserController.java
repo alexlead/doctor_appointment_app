@@ -1,6 +1,7 @@
 package com.ait_31_2.doctor_appointment_app.controllers;
 
 import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
+import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
@@ -33,9 +34,9 @@ public class UserController {
     public Response register(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User`s object")
-            User user
+            RegistrationForm form
             ) {
-        Response response = service.registerUser(user);
+        Response response = service.registerUser(form);
         return response;
     }
 
