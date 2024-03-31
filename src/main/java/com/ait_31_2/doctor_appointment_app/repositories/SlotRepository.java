@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface SlotRepository extends JpaRepository<Slot, Integer> {
     @Query(value = "SELECT * FROM doctor_appointment_system.slot WHERE id NOT IN ( SELECT slot_id FROM doctor_appointment_system.appointment WHERE (date = :date) AND (doctor_id = :doctorId));", nativeQuery = true)
-    List<Slot> findFreeSlotsByDateAndDoctor(@Param("date") LocalDate date, @Param("doctorId") int doctorId);
+    List<Slot> findFreeSlotsByDateAndDoctorId(@Param("date") LocalDate date, @Param("doctorId") int doctorId);
 
 }
