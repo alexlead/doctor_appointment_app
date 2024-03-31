@@ -1,8 +1,18 @@
 package com.ait_31_2.doctor_appointment_app.domain;
 
-public class LoginForm {
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(
+        description = "Login form"
+)
+public class LoginForm {
+    @Schema(
+            description = "email, which is a username",
+            example = "iv_ivanov@gm.com")
     private String username;
+    @Schema(
+            description = "Password",
+            example = "123S!fghjk")
     private String password;
 
 

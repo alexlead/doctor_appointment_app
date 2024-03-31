@@ -1,6 +1,5 @@
 package com.ait_31_2.doctor_appointment_app.domain.classes;
 
-import com.ait_31_2.doctor_appointment_app.domain.interfaces.UserInterface;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -95,7 +94,6 @@ public class User implements UserDetails {
         this.password = password;
         this.roles = roles;
     }
-
 
 
     public int getId() {

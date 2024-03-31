@@ -33,8 +33,8 @@ public class SlotService  {
         return repository.findById(id).orElse(null);
     }
 
-    public List<Slot> getAllFreeSlotByDateAndDoctor(LocalDate date, String doctorName, String doctorSurname) {
-        int doctorId = userService.getDoctorByName(doctorName, doctorSurname).getId();
+    public List<Slot> getAllFreeSlotByDateAndId(LocalDate date, int doctorId) {
+      //TODO
         List<Slot> slots =  repository.findFreeSlotsByDateAndDoctor(date, doctorId);
         if (slots==null){
             throw new NotFreeSlotsException("There are no slots on this date!");

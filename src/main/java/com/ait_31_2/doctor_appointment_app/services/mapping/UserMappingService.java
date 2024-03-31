@@ -4,6 +4,7 @@ import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class UserMappingService {
         return new UserDto(id, name, surname,null,null);
 
     }
-    public User  mapRegistrationFormToUser(RegistrationForm form){
+    public User  mapRegistrationFormToUser(@Nonnull RegistrationForm form){
         User user = new User();
         user.setId(0);
         user.setName(form.getName());

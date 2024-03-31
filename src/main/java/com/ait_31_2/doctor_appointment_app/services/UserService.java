@@ -11,6 +11,7 @@ import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,18 +47,6 @@ public class UserService implements UserDetailsService {
         return new Response("OK", "User " + user.getName() + " " + user.getSurname() + " successfully registered!");
     }
 
-//    @Transactional
-//    public Response authorization(String username, String password) {
-//
-//        User foundUser = repository.findByUsername(username);
-//
-//        if (foundUser == null || !encoder.matches(password, foundUser.getPassword())) {
-//            throw new UnauthorizedException("Invalid username or password!");
-//        }
-//
-//        return new Response("OK", "User " + foundUser.getName() + " " + foundUser.getSurname() + " successfully authorized!");
-//    }
-
 
     public List<UserDto> getAllUser() {
         return repository.findAll()
@@ -68,25 +57,34 @@ public class UserService implements UserDetailsService {
 
 
     public List<UserDto> getAllDoctors() {
-        return repository.findAllByRole("ROLE_DOCTOR")
-                .stream()
-                .map(user -> mapping.mapUserToDtoName(user))
-                .toList();
+        return getUserByRole("ROLE_DOCTOR");
+
     }
 
 
-    public UserDto getDoctorByName(String name, String surname) {
-        User doctor = repository.findUserByNameAndRole(name, surname, "ROLE_DOCTOR");
-        if (doctor == null) {
-            throw new DoctorNotFoundException("No doctor with that name was found!");
+    public UserDto getDoctorById(int doctorId) {
+        User doctor = repository.findById(doctorId).orElse(null);
+
+        if (doctor == null || !hasRole(doctor, "ROLE_DOCTOR")) {
+            throw new DoctorNotFoundException("Doctor was not found!");
         }
-        return mapping.mapUserToDto(doctor);
+        return mapping.mapUserToDtoName(doctor);
+    }
+
+    private boolean hasRole(User user, String roleName) {
+        for (GrantedAuthority authority : user.getAuthorities()) {
+            if (authority.getAuthority().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
     public List<UserDto> getPatientByName(String partName) {
         return repository.findUserByPartName(partName)
                 .stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getAuthority().equals("ROLE_PATIENT")))
                 .map(user -> mapping.mapUserToDto(user))
                 .toList();
     }
@@ -108,22 +106,6 @@ public class UserService implements UserDetailsService {
 
         return mapping.mapUserToDto(user);
     }
-
-
-//    public Response logout() {
-//
-//        try {
-//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//            if (auth != null) {
-//                new SecurityContextLogoutHandler().logout(request, null, auth);
-//            }
-//            return new Response("OK", "Logout successful!");
-//        } catch (Exception e) {
-//
-//            return new Response("ERROR", "Logout failed! ");
-//        }
-//    }
-
 
     //Spring security
     @Override

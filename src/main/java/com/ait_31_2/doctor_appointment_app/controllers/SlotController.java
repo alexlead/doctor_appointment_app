@@ -16,18 +16,18 @@ import java.util.List;
 public class SlotController {
     @Autowired
     SlotService service;
+    //TODO
+//    @GetMapping("/all")
+//    public List<Slot> getAll(){
+//        return service.getAllSlots();
+//    }
 
-    @GetMapping("/all")
-    public List<Slot> getAll(){
-        return service.getAllSlots();
-    }
-
-    @PostMapping("/free")
-    public List<Slot> getAllFreeSlot(@RequestBody SlotRequest request) {
-       LocalDate date = request.getDate();
-        String name = request.getName();
-        String surname = request.getSurname();
-        return service.getAllFreeSlotByDateAndDoctor(date,name,surname);
-    }
+//    @PostMapping("/free")
+//    public List<Slot> getAllFreeSlot(@RequestBody SlotRequest request) {
+//       LocalDate date = request.getDate();
+//        String name = request.getName();
+//        String surname = request.getSurname();
+//        return service.getAllFreeSlotByDateAndDoctor(date,name,surname);
+//    }
 
 }
