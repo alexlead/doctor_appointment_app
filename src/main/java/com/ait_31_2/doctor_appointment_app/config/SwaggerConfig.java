@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title ="Doctor Appointment System app",
-                description = "APIs for managing appointments at a family medicine center.",
+                description = "APIs for managing appointments at a family medicine center",
                 version = "1.0.0",
                 contact = @Contact (
                         name = "AIT, Team 20",

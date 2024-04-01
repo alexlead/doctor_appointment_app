@@ -1,0 +1,46 @@
+package com.ait_31_2.doctor_appointment_app.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import lombok.Data;
+
+@Data
+@Schema(
+        description = "Registration form"
+)
+public class RegistrationForm {
+    @Pattern(
+            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
+    )
+    @Schema(
+            description = "User`s name",
+            example = "Ivan")
+    private String name;
+
+    @Pattern(
+            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
+    )
+    @Schema(
+            description = "User`s surname",
+            example = "Ivanov")
+    private String surname;
+
+    @Schema(
+            description = "email, which is a username",
+            example = "iv_ivanov@gm.com")
+    @Email(message = "Incorrect email values are not allowed")
+    private String username;
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+            message = "The password must contain at least one digit, one lowercase and one uppercase letter, " +
+                    "one special character, and be at least 8 characters long."
+    )
+    @Schema(
+            description = "Password",
+            example = "123S!fghjk")
+    private String password;
+
+}

@@ -4,4 +4,5 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role,Integer> {
+    Role findByName(String name);
 }

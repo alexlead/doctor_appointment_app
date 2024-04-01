@@ -1,7 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.controllers;
 
-import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
-import com.ait_31_2.doctor_appointment_app.domain.classes.User;
+import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 @Tag(name = "User controller",
         description = "")
 public class UserController {
@@ -33,39 +32,16 @@ public class UserController {
     public Response register(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User`s object")
-            User user
+            RegistrationForm form
             ) {
-        Response response = service.registerUser(user);
+        Response response = service.registerUser(form);
         return response;
     }
 
-    @PostMapping("/authorisation")
-    @Operation(
-            summary = "Authorisation",
-            description = "Signing in to app 'Doctor appointment system'.Available to all users."
-    )
-    public Response authorisation(@RequestBody LoginForm loginForm) {
-        String username = loginForm.getUsername();
-
-        Response response = service.authorization(username, loginForm.getPassword());
-        return response;
-    }
-
-    @PostMapping("/logout")
-    @Operation(
-            summary = "Logout",
-            description = "Logging out of an account from the 'Doctor appointment system'. Available to registered users."
-    )
-    public Response logout() {
-        Response resp = service.logout();
-        return resp;
-    }
-
-
-    @GetMapping("/all")
+    @GetMapping("/")
     @Operation(
             summary = "List of users",
-            description = "View list of all doctors. Available to administration."
+            description = "View list of all users. Available to administration."
     )
     public List<UserDto> getAll() {
         return service.getAllUser();
@@ -80,17 +56,15 @@ public class UserController {
         return service.getAllDoctors();
     }
 
-    @GetMapping("/doctor/{name}/{surname}")
+    @GetMapping("/doctor/{id}")
     @Operation(
             summary = "Find doctor",
-            description = "Search for a doctor by full name. Available to registered patients and administration."
+            description = "Search for a doctor by id. Available to registered patients and administration."
     )
     public UserDto getDoctor(
             @PathVariable
-            @Parameter(description ="Doctor`s name")String name,
-            @PathVariable
-            @Parameter(description ="Doctor`s surname")String surname) {
-        return service.getDoctorByName(name, surname);
+            @Parameter(description ="User`s id")int id) {
+        return service.getDoctorById(id);
     }
 
     @GetMapping("/patient/{partName}")
