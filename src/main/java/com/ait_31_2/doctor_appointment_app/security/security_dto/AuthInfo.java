@@ -13,11 +13,15 @@ public class AuthInfo implements Authentication {
     private boolean authenticated;
     private String username;
     private String name;
+    private String surname;
+
     private Set<Role> roles;
 
 
-    public AuthInfo(String username, Set<Role> roles) {
+    public AuthInfo(String username, String name, String surname, Set<Role> roles) {
         this.username = username;
+        this.name = name;
+        this.surname = surname;
         this.roles = roles;
     }
 
@@ -51,21 +55,30 @@ public class AuthInfo implements Authentication {
         this.authenticated = isAuthenticated;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
     @Override
     public String getName() {
         return name;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AuthInfo authInfo)) return false;
-        return isAuthenticated() == authInfo.isAuthenticated() && Objects.equals(username, authInfo.username) && Objects.equals(getName(), authInfo.getName()) && Objects.equals(roles, authInfo.roles);
+        return isAuthenticated() == authInfo.isAuthenticated() && Objects.equals(username, authInfo.username) && Objects.equals(getName(), authInfo.getName()) && Objects.equals(getSurname(), authInfo.getSurname()) && Objects.equals(getRoles(), authInfo.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isAuthenticated(), username, getName(), roles);
+        return Objects.hash(isAuthenticated(), username, getName(), getSurname(), getRoles());
     }
 
     @Override
@@ -74,7 +87,8 @@ public class AuthInfo implements Authentication {
                 "authenticated=" + authenticated +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
-                ", role=" + roles +
+                ", surname='" + surname + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

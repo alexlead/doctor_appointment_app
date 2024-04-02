@@ -1,6 +1,7 @@
 package com.ait_31_2.doctor_appointment_app.controllers;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Appointment;
+import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.domain.dto.AppointmentDto;
 import com.ait_31_2.doctor_appointment_app.services.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,10 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Date;
@@ -45,6 +43,13 @@ public class AppointmentController {
     public List<AppointmentDto> getPastAppointments(@PathVariable int patientId){
         return service.getPastAppointmentsPatient(patientId);
     }
+
+
+    @PostMapping("/new/{date}/{id}/{slotId}")
+    public int save (@PathVariable LocalDate date,@PathVariable int id, @PathVariable int slotId){
+        return service.saveNewAppointment(date,id,slotId);
+    }
+
 
 
 }

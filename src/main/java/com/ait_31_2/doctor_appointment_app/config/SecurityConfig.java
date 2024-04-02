@@ -49,10 +49,10 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users/{userid}").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "api/users/").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/users/doctors").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/users/").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users/doctor/{id}").hasAnyRole("ADMIN", "PATIENT")
+                                .requestMatchers(HttpMethod.GET, "/api/users/doctors/").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users/patient/{partName}").hasAnyRole("ADMIN", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/api/auth/logout").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login", "api/auth/refresh", "/api/auth/logout").permitAll()
@@ -66,9 +66,10 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/api/slots/{data}/{id}").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 //.requestMatchers(HttpMethod.GET, "/api/slots/").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
-                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/{patientId}/{timeStart}/{timeEnd}").hasAnyRole("PATIENT","ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/future/{patientId}").hasAnyRole("PATIENT","ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/past/{patientId}").hasAnyRole("PATIENT","ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/{patientId}/{timeStart}/{timeEnd}").hasAnyRole("PATIENT", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/future/{patientId}").hasAnyRole("PATIENT", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/past/{patientId}").hasAnyRole("PATIENT", "ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/appointments/new/{date}/{id}/{slotId}").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям

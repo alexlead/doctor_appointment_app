@@ -47,7 +47,7 @@ public class UserController {
         return service.getAllUser();
     }
 
-    @GetMapping("/doctors")
+    @GetMapping("/doctors/")
     @Operation(
             summary = "Doctors",
             description = "View list of all doctors. Available to all users."
