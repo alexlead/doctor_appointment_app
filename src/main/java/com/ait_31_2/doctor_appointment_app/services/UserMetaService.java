@@ -4,8 +4,11 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.classes.UserMeta;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserMetaDto;
 import com.ait_31_2.doctor_appointment_app.repositories.UserMetaRepository;
+import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMetaMappingService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,17 +16,28 @@ import java.util.List;
 @Service
 public class UserMetaService {
     private UserMetaRepository repository;
+    private UserRepository userRepository;
     private UserMetaMappingService mapping;
 
 
-    public UserMetaService(UserMetaRepository repository, UserMetaMappingService mapping) {
+    public UserMetaService(UserMetaRepository repository, UserMetaMappingService mapping, UserRepository userRepository) {
         this.repository = repository;
         this.mapping = mapping;
+        this.userRepository = userRepository;
     }
 
-    public List<UserMetaDto> getUserProfileById(int userId) {
+    public User getCurrentUser() {
+        Authentication authenticationToken = SecurityContextHolder.getContext().getAuthentication();
+        String username = String.valueOf(authenticationToken.getPrincipal());
+        User user = userRepository.findByUsername(username);
+        return user;
+    }
 
-        List<UserMetaDto> userProfile = repository.findAllByUserId(userId)
+    public List<UserMetaDto> getUserProfileById() {
+
+        User user = getCurrentUser();
+
+        List<UserMetaDto> userProfile = repository.findAllByUserId(user.getId())
                 .stream()
                 .map(userMeta -> mapping.mapUserMetaToDto(userMeta))
                 .toList();
@@ -35,9 +49,8 @@ public class UserMetaService {
     }
 
     @Transactional
-    public void updateUserProfileById(int userId, List<UserMetaDto> profile) {
-        User user = new User();
-        user.setId(userId);
+    public void updateUserProfileById( List<UserMetaDto> profile) {
+        User user = getCurrentUser();
         for (UserMetaDto dto : profile) {
             UserMeta meta = repository.findByUserIdAndMetaKey(user.getId(), dto.getMetaKey());
             if (meta == null) {
@@ -55,9 +68,10 @@ public class UserMetaService {
 
     }
 
-    public void deleteByUserIdAndMetaKey(int userId, List<UserMetaDto> profile) {
+    public void deleteByUserIdAndMetaKey(List<UserMetaDto> profile) {
+        User user = getCurrentUser();
         for (UserMetaDto dto : profile) {
-            repository.deleteByUserIdAndMetaKey(userId, dto.getMetaKey());
+            repository.deleteByUserIdAndMetaKey(user.getId(), dto.getMetaKey());
         }
     }
 
