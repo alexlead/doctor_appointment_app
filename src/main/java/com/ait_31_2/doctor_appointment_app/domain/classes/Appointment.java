@@ -3,8 +3,6 @@ package com.ait_31_2.doctor_appointment_app.domain.classes;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 

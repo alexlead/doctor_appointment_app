@@ -14,6 +14,7 @@ public class AppointmentDto {
     private int id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private UserDto patientId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private UserDto doctorId;
     private Slot slotId;
     private LocalDate date;

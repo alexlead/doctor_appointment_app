@@ -3,6 +3,7 @@ package com.ait_31_2.doctor_appointment_app.security.security_service;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.repositories.RoleRepository;
+import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.AuthInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,6 +25,7 @@ public class TokenService {
     private SecretKey refreshKey;
     private RoleRepository roleRepository;
 
+
     public TokenService(@Value("${access.key}") String accessKey,
                         @Value("${refresh.key}") String refreshKey, RoleRepository roleRepository) {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessKey));
@@ -41,7 +43,8 @@ public class TokenService {
                 .expiration(expirationDate)
                 .signWith(accessKey)
                 .claim("roles", user.getRoles())
-                .claim("name", user.getUsername())
+                .claim("username", user.getUsername())
+                .claim("name", user.getName())
                 .claim("surname", user.getSurname())
                 .compact();
     }
@@ -79,24 +82,28 @@ public class TokenService {
         }
     }
 
-    public Claims getAccessClaims (@Nonnull String accessToken){
+    public Claims getAccessClaims(@Nonnull String accessToken) {
         return getClaims(accessToken, accessKey);
     }
 
-    public Claims getRefreshClaims (@Nonnull String refreshToken){
+    public Claims getRefreshClaims(@Nonnull String refreshToken) {
         return getClaims(refreshToken, accessKey);
     }
 
-    private Claims getClaims(@Nonnull String token, @Nonnull SecretKey key ){
+    private Claims getClaims(@Nonnull String token, @Nonnull SecretKey key) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
-//TODO
-    public AuthInfo generateAuthInfo(Claims claims){
+
+    public AuthInfo generateAuthInfo(Claims claims) {
         String username = claims.getSubject();
+        String name = claims.get("name", String.class);
+        String surname = claims.get("surname", String.class);
+
+
         List<LinkedHashMap<String, String>> rolesList = (List<LinkedHashMap<String, String>>) claims.get("roles");
         Set<Role> roles = new HashSet<>();
 
@@ -106,8 +113,9 @@ public class TokenService {
             roles.add(role);
         }
 
-        return new AuthInfo(username, roles);
+
+        return new AuthInfo(username, name, surname, roles);
     }
 
-    }
+}
 
