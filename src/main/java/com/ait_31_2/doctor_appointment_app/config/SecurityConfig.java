@@ -56,11 +56,11 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/users/patient/{partName}").hasAnyRole("ADMIN", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/api/auth/logout").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login", "api/auth/refresh", "/api/auth/logout").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/profile").hasAnyRole(
+                                .requestMatchers(HttpMethod.GET, "/api/profile").hasAnyRole(
                                         "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.PUT, "/profile").hasAnyRole(
+                                .requestMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole(
                                         "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.DELETE, "/profile").hasAnyRole(
+                                .requestMatchers(HttpMethod.DELETE, "/api/profile").hasAnyRole(
                                         "ADMIN","PATIENT","DOCTOR")
 
 
