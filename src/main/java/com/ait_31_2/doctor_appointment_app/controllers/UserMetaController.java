@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/api/profile")
 public class UserMetaController {
 
     private UserMetaService service;
@@ -16,18 +16,18 @@ public class UserMetaController {
         this.service = service;
     }
 
-    @GetMapping("/{userid}")
-    public List<UserMetaDto> getUserProfileById(@PathVariable int userid) {
-        return service.getUserProfileById(userid);
+    @GetMapping
+    public List<UserMetaDto> getUserProfileById() {
+        return service.getUserProfileById();
     }
 
-    @PutMapping("/{userid}")
-    public void updateUserProfileById(@PathVariable int userid, @RequestBody List<UserMetaDto> profile) {
-        service.updateUserProfileById(userid, profile);
+    @PutMapping
+    public void updateUserProfileById(@RequestBody List<UserMetaDto> profile) {
+        service.updateUserProfileById(profile);
     }
-    @DeleteMapping("/{userid}")
-    public void deleteUserProfileFields(@PathVariable int userid, @RequestBody List<UserMetaDto> profile) {
-        service.deleteByUserIdAndMetaKey(userid, profile);
+    @DeleteMapping
+    public void deleteUserProfileFields( @RequestBody List<UserMetaDto> profile) {
+        service.deleteByUserIdAndMetaKey( profile);
     }
 
 }
