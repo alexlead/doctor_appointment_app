@@ -5,6 +5,7 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.Appointment;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.AppointmentDto;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.AccessDeniedException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.AppointmentNotFoundException;
 import com.ait_31_2.doctor_appointment_app.repositories.AppointmentRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.RoleRepository;
@@ -61,12 +62,21 @@ public class AppointmentService {
 
     }
 
-    public AppointmentDto getAppointmentById(int id){
+
+    public AppointmentDto getAppointmentById(int id) throws AccessDeniedException {
         Appointment appointment = repository.findById(id).orElse(null);
         if (appointment == null) {
             throw new AppointmentNotFoundException("Appointment with ID " + id + " not found.");
         }
-        return appointmentMappingService.mapAppointmentToDto(appointment);
+        int userId = getUserId();
+        User patientUser = appointment.getPatientId();
+        User doctorUser = appointment.getDoctorId();
+        if (userId == patientUser.getId() || userId == doctorUser.getId()) {
+
+            return appointmentMappingService.mapAppointmentToDto(appointment);
+        } else {
+            throw new AccessDeniedException("Access denied!");
+        }
     }
 
 
@@ -79,7 +89,7 @@ public class AppointmentService {
 
         int appointmentId = request.getAppointmentId();
         Appointment existingAppointment = repository.findById(appointmentId).orElse(null);
-        if(appointmentId!=0 && existingAppointment !=null) {
+        if (appointmentId != 0 && existingAppointment != null) {
             existingAppointment.setDate(date);
             Slot slot = slotRepository.findById(slotId).orElse(null);
             existingAppointment.setSlotId(slot);
@@ -97,7 +107,7 @@ public class AppointmentService {
             User user2 = userRepository.findById(userId2).orElse(null);
             if (user2 != null) {
                 if (hasRole(user2, "ROLE_PATIENT")) {
-                   existingAppointment.setPatientId(user2);
+                    existingAppointment.setPatientId(user2);
                 } else if (hasRole(user2, "ROLE_DOCTOR")) {
                     existingAppointment.setDoctorId(user2);
                 }
@@ -106,7 +116,7 @@ public class AppointmentService {
             Appointment saveAppointment = repository.save(existingAppointment);
             return saveAppointment.getId();
 
-        }else {
+        } else {
             Appointment newAppointment = new Appointment();
 
             newAppointment.setDate(date);
@@ -155,8 +165,6 @@ public class AppointmentService {
         return user.getRoles().stream()
                 .anyMatch(role -> role.getAuthority().equals(roleName));
     }
-
-
 
 
 }
