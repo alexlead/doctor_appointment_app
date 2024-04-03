@@ -10,7 +10,7 @@ import java.util.Objects;
 
 
 public class AppointmentDto {
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private int id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private UserDto patientId;
@@ -18,6 +18,7 @@ public class AppointmentDto {
     private UserDto doctorId;
     private Slot slotId;
     private LocalDate date;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean visitComplete;
 
     public AppointmentDto() {
@@ -32,7 +33,13 @@ public class AppointmentDto {
         this.visitComplete = visitComplete;
     }
 
-
+    public AppointmentDto(int id,UserDto patientId, UserDto doctorId, Slot slotId, LocalDate date) {
+        this.id = id;
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.slotId = slotId;
+        this.date = date;
+    }
 
     public int getId() {
         return id;

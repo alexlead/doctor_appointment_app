@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class UserDto {
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private int id;
     private String name;
     private String surname;

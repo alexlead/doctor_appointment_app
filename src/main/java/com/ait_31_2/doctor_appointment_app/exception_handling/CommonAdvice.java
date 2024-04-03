@@ -45,5 +45,20 @@ public class CommonAdvice {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<Response> handleException(AppointmentNotFoundException e) {
+        e.printStackTrace();
+        Response response = new Response("ERROR",e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Response> handleException(AccessDeniedException e) {
+        e.printStackTrace();
+        Response response = new Response("ERROR",e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }

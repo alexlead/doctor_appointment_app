@@ -1,7 +1,8 @@
 package com.ait_31_2.doctor_appointment_app.controllers;
 
-import com.ait_31_2.doctor_appointment_app.domain.NewAppointmentRequest;
+import com.ait_31_2.doctor_appointment_app.domain.AppointmentRequest;
 import com.ait_31_2.doctor_appointment_app.domain.dto.AppointmentDto;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.AccessDeniedException;
 import com.ait_31_2.doctor_appointment_app.services.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,9 +43,14 @@ public class AppointmentController {
     }
 
 
-    @PostMapping("/new")
-    public int save(@RequestBody NewAppointmentRequest request) {
-        return service.saveNewAppointment(request);
+    @PostMapping("/")
+    public int save(@RequestBody AppointmentRequest request) {
+        return service.saveAppointment(request);
+    }
+
+    @GetMapping("/{id}")
+    public AppointmentDto getById(@PathVariable int id)throws AccessDeniedException {
+        return service.getAppointmentById(id);
     }
 
 
