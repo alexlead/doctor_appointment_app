@@ -31,14 +31,14 @@ public class AppointmentController {
         return service.getAllAppointmentsPatient(timeStart, timeEnd);
     }
 
-    @GetMapping("/patient/future/{patientId}")
-    public List<AppointmentDto> getFutureAppointments(@PathVariable int patientId) {
-        return service.getFutureAppointmentsPatient(patientId);
+    @GetMapping("/patient/future/")
+    public List<AppointmentDto> getFutureAppointments() {
+        return service.getFutureAppointmentsPatient();
     }
 
-    @GetMapping("patient/past/{patientId}")
-    public List<AppointmentDto> getPastAppointments(@PathVariable int patientId) {
-        return service.getPastAppointmentsPatient(patientId);
+    @GetMapping("patient/past/")
+    public List<AppointmentDto> getPastAppointments() {
+        return service.getPastAppointmentsPatient();
     }
 
 
