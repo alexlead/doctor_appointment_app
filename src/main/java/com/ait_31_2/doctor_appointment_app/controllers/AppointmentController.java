@@ -22,14 +22,14 @@ public class AppointmentController {
 
     private final AppointmentService service;
 
-    @GetMapping("/patient/{timeStart}/{timeEnd}")
+    @GetMapping("/{timeStart}/{timeEnd}")
     @Operation(
             summary = "",
             description = ""
     )
     public List<AppointmentDto> getAllAppointments(@PathVariable @Parameter(description = "2024-02-25") LocalDate timeStart,
                                                    @PathVariable @Parameter(description = "2024-03-25") LocalDate timeEnd) {
-        return service.getAllAppointmentsPatient(timeStart, timeEnd);
+        return service.getAllAppointments(timeStart, timeEnd);
     }
 
     @GetMapping("/patient/future/")

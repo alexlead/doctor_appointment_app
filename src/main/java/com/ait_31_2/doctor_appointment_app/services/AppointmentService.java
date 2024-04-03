@@ -31,15 +31,30 @@ public class AppointmentService {
     private final SlotRepository slotRepository;
 
 
-    public List<AppointmentDto> getAllAppointmentsPatient(LocalDate timeStart, LocalDate timeEnd) {
+    public List<AppointmentDto> getAllAppointments(LocalDate timeStart, LocalDate timeEnd) {
         if (timeStart.isAfter(timeEnd)) {
             throw new IllegalArgumentException("The start time must not be later than the end time!");
         }
-        int patientId = getUserId();
-        return repository.findAllAppointmentsPatientByDataInterval(patientId, timeStart, timeEnd)
-                .stream()
-                .map(a -> appointmentMappingService.mapEntityToDto(a))
-                .toList();
+        int userId = getUserId();
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (!(hasRole(user, "ROLE_DOCTOR")) && !(hasRole(user, "ROLE_PATIENT"))) {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
+        if (hasRole(user, "ROLE_PATIENT")) {
+            return repository.findAllAppointmentsPatientByDataInterval(userId, timeStart, timeEnd)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
+                    .toList();
+        } else if (hasRole(user, "ROLE_DOCTOR")) {
+            return repository.findAllAppointmentsDoctorByDataInterval(userId, timeStart, timeEnd)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoDoctor(a))
+                    .toList();
+
+        }else {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
 
     }
 
@@ -47,7 +62,7 @@ public class AppointmentService {
         int patientId = getUserId();
         return repository.findFutureAppointments(patientId)
                 .stream()
-                .map(a -> appointmentMappingService.mapEntityToDto(a))
+                .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
                 .toList();
 
     }
@@ -57,7 +72,7 @@ public class AppointmentService {
         int patientId = getUserId();
         return repository.findPastAppointments(patientId)
                 .stream()
-                .map(a -> appointmentMappingService.mapEntityToDto(a))
+                .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
                 .toList();
 
     }
