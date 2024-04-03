@@ -5,11 +5,13 @@ import java.util.Objects;
 
 public class NewAppointmentRequest {
 
+    private int appointmentId;
     private LocalDate date;
     private int userId1;
     private int slotId;
 
-    public NewAppointmentRequest(LocalDate date, int userId1, int slotId) {
+    public NewAppointmentRequest(int appointmentId, LocalDate date, int userId1, int slotId) {
+        this.appointmentId = appointmentId;
         this.date = date;
         this.userId1 = userId1;
         this.slotId = slotId;
@@ -27,22 +29,31 @@ public class NewAppointmentRequest {
         return slotId;
     }
 
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof NewAppointmentRequest that)) return false;
-        return getUserId1() == that.getUserId1() && getSlotId() == that.getSlotId() && Objects.equals(getDate(), that.getDate());
+        return getAppointmentId() == that.getAppointmentId() && getUserId1() == that.getUserId1() && getSlotId() == that.getSlotId() && Objects.equals(getDate(), that.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getDate(), getUserId1(), getSlotId());
+        return Objects.hash(getAppointmentId(), getDate(), getUserId1(), getSlotId());
     }
 
     @Override
     public String toString() {
         return "NewAppointmentRequest{" +
-                "date=" + date +
+                "appointmentId=" + appointmentId +
+                ", date=" + date +
                 ", userId1=" + userId1 +
                 ", slotId=" + slotId +
                 '}';

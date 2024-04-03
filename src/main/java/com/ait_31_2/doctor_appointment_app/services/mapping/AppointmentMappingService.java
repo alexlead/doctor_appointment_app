@@ -22,4 +22,10 @@ public class AppointmentMappingService {
 
 
     }
+
+    public AppointmentDto mapAppointmentToDto(Appointment appointment){
+        UserDto patientId = userMappingService.mapUserToDtoName(appointment.getPatientId());
+        UserDto doctorId = userMappingService.mapUserToDtoName(appointment.getDoctorId());
+        return new AppointmentDto(appointment.getId(),patientId,doctorId,appointment.getSlotId(),appointment.getDate());
+    }
 }

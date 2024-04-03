@@ -70,6 +70,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/patient/future/").hasAnyRole("PATIENT", "ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/patient/past/").hasAnyRole("PATIENT", "ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/appointments/new").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/{id}").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям

@@ -60,6 +60,11 @@ public class AppointmentService {
 
     }
 
+    public AppointmentDto getAppointmentById(int id){
+        Appointment appointment = repository.findById(id).orElse(null);
+        return appointmentMappingService.mapAppointmentToDto(appointment);
+    }
+
 
     public int saveNewAppointment(NewAppointmentRequest request) {
         LocalDate date = request.getDate();
@@ -67,6 +72,8 @@ public class AppointmentService {
         int slotId = request.getSlotId();
 
         int userId2 = getUserId();
+
+        int appointmentId = request.getAppointmentId();
         Appointment newAppointment = new Appointment();
 
         newAppointment.setDate(date);
