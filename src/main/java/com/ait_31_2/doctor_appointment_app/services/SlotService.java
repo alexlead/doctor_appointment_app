@@ -7,7 +7,6 @@ import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.NotFree
 import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class SlotService  {
 
 
 
-    public List<Slot> getAllSlots() {
+    private List<Slot> getAllSlots() {
         return repository.findAll();
     }
 

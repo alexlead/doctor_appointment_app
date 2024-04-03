@@ -41,7 +41,8 @@ public class AppointmentService {
 
     }
 
-    public List<AppointmentDto> getFutureAppointmentsPatient(int patientId) {
+    public List<AppointmentDto> getFutureAppointmentsPatient() {
+        int patientId = getUserId();
         return repository.findFutureAppointments(patientId)
                 .stream()
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
@@ -50,7 +51,8 @@ public class AppointmentService {
     }
 
 
-    public List<AppointmentDto> getPastAppointmentsPatient(int patientId) {
+    public List<AppointmentDto> getPastAppointmentsPatient() {
+        int patientId = getUserId();
         return repository.findPastAppointments(patientId)
                 .stream()
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
