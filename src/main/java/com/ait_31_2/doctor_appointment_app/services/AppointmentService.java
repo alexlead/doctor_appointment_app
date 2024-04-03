@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.services;
 
+import com.ait_31_2.doctor_appointment_app.domain.NewAppointmentRequest;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Appointment;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
@@ -58,7 +59,10 @@ public class AppointmentService {
     }
 
 
-    public int saveNewAppointment(LocalDate date, int userId1, int slotId) {
+    public int saveNewAppointment(NewAppointmentRequest request) {
+        LocalDate date = request.getDate();
+        int userId1 = request.getUserId1();
+        int slotId = request.getSlotId();
 
         int userId2 = getUserId();
         Appointment newAppointment = new Appointment();

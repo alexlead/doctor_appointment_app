@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.controllers;
 
+import com.ait_31_2.doctor_appointment_app.domain.NewAppointmentRequest;
 import com.ait_31_2.doctor_appointment_app.domain.dto.AppointmentDto;
 import com.ait_31_2.doctor_appointment_app.services.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,9 +42,9 @@ public class AppointmentController {
     }
 
 
-    @PostMapping("/new/{date}/{id}/{slotId}")
-    public int save(@PathVariable LocalDate date, @PathVariable int id, @PathVariable int slotId) {
-        return service.saveNewAppointment(date, id, slotId);
+    @PostMapping("/new")
+    public int save(@RequestBody NewAppointmentRequest request) {
+        return service.saveNewAppointment(request);
     }
 
 
