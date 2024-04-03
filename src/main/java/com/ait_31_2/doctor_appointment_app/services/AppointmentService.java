@@ -5,6 +5,7 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.Appointment;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.AppointmentDto;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.AppointmentNotFoundException;
 import com.ait_31_2.doctor_appointment_app.repositories.AppointmentRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.RoleRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
@@ -62,6 +63,9 @@ public class AppointmentService {
 
     public AppointmentDto getAppointmentById(int id){
         Appointment appointment = repository.findById(id).orElse(null);
+        if (appointment == null) {
+            throw new AppointmentNotFoundException("Appointment with ID " + id + " not found.");
+        }
         return appointmentMappingService.mapAppointmentToDto(appointment);
     }
 
