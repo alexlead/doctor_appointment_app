@@ -37,7 +37,7 @@ public class AuthService {
             String accessToken = tokenService.generateAccessToken(foundUser);
             String refreshToken = tokenService.generateRefreshToken(foundUser);
             refreshStorage.put(username, refreshToken);
-            return new TokenResponseDto(accessToken, refreshToken,"OK");
+            return new TokenResponseDto(accessToken, refreshToken);
         } else {
             throw new AuthException("Password is incorrect");
         }

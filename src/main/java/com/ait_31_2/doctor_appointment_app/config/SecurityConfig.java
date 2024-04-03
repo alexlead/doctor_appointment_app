@@ -66,10 +66,10 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/api/slots/{data}/{id}").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 //.requestMatchers(HttpMethod.GET, "/api/slots/").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
-                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/{timeStart}/{timeEnd}").hasAnyRole("PATIENT", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/future/").hasAnyRole("PATIENT", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/past/").hasAnyRole("PATIENT", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/appointments/new").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/{patientId}/{timeStart}/{timeEnd}").hasAnyRole("PATIENT", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/future/{patientId}").hasAnyRole("PATIENT", "ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/appointments/patient/past/{patientId}").hasAnyRole("PATIENT", "ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/appointments/new/{date}/{id}/{slotId}").hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям

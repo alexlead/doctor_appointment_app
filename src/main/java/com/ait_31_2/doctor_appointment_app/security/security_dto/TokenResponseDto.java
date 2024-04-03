@@ -12,12 +12,6 @@ public class TokenResponseDto {
         this.refreshToken = refreshToken;
     }
 
-    public TokenResponseDto(String accessToken, String refreshToken, String message) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-        this.message = message;
-    }
-
     public TokenResponseDto(String message) {
         this.message = message;
     }
