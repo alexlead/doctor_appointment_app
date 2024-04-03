@@ -24,10 +24,10 @@ public class SlotController {
 
     private final SlotService service;
 
-    @GetMapping("/")
-    public List<Slot> getAll() {
-        return service.getAllSlots();
-    }
+//    @GetMapping("/")
+//    public List<Slot> getAll() {
+//        return service.getAllSlots();
+//    }
 
     @GetMapping("/{date}/{id}")
     @Operation(
