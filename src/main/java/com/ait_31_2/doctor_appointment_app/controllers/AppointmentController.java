@@ -32,12 +32,12 @@ public class AppointmentController {
         return service.getAllAppointments(timeStart, timeEnd);
     }
 
-    @GetMapping("/patient/future/")
+    @GetMapping("/upcoming/")
     public List<AppointmentDto> getFutureAppointments() {
         return service.getFutureAppointmentsPatient();
     }
 
-    @GetMapping("patient/past/")
+    @GetMapping("/previous/")
     public List<AppointmentDto> getPastAppointments() {
         return service.getPastAppointmentsPatient();
     }

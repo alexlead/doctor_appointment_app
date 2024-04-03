@@ -59,12 +59,26 @@ public class AppointmentService {
     }
 
     public List<AppointmentDto> getFutureAppointmentsPatient() {
-        int patientId = getUserId();
-        return repository.findFutureAppointments(patientId)
-                .stream()
-                .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
-                .toList();
+        int userId = getUserId();
+        User user = userRepository.findById(userId).orElse(null);
 
+        if (!(hasRole(user, "ROLE_DOCTOR")) && !(hasRole(user, "ROLE_PATIENT"))) {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
+        if (hasRole(user, "ROLE_PATIENT")) {
+            return repository.findFutureAppointmentsPatient(userId)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
+                    .toList();
+        } else if (hasRole(user, "ROLE_DOCTOR")) {
+            return repository.findFutureAppointmentsDoctor(userId)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoDoctor(a))
+                    .toList();
+
+        }else {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
     }
 
 

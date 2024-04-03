@@ -34,8 +34,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "        doctor_appointment_system.user ON appointment.doctor_id = user.id WHERE (  appointment.patient_id =:patientId)" +
             "        AND appointment.date >=current_date()" +
             "        order by appointment.date asc limit 2;", nativeQuery = true)
-    List<Appointment> findFutureAppointments(@Param("patientId") int patientId);
+    List<Appointment> findFutureAppointmentsPatient(@Param("patientId") int patientId);
 
+
+    @Query(value = "SELECT  appointment.*, slot.time_start, slot.time_end, user.name, user.surname FROM doctor_appointment_system.appointment" +
+            "        JOIN  doctor_appointment_system.slot ON appointment.slot_id = slot.id JOIN " +
+            "        doctor_appointment_system.user ON appointment.patient_id = user.id WHERE (  appointment.doctor_id =:doctorId)" +
+            "        AND appointment.date >=current_date()" +
+            "        order by appointment.date asc limit 4;", nativeQuery = true)
+    List<Appointment> findFutureAppointmentsDoctor(@Param("doctorId") int patientId);
 
     @Query(value = "SELECT  appointment.*, slot.time_start, slot.time_end, user.name, user.surname FROM doctor_appointment_system.appointment" +
             "        JOIN  doctor_appointment_system.slot ON appointment.slot_id = slot.id JOIN " +
