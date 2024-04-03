@@ -3,12 +3,12 @@ package com.ait_31_2.doctor_appointment_app.services;
 import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
-import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.DoctorNotFoundException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
+import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
+import com.ait_31_2.doctor_appointment_app.security.security_service.TokenService;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +18,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,24 +29,35 @@ public class UserService implements UserDetailsService {
     private UserMappingService mapping;
     private BCryptPasswordEncoder encoder;
     @Autowired
-    private HttpServletRequest request;
+    private TokenService tokenService;
+    private Map<String,String > refreshStorage;
+
+
 
     public UserService(UserRepository repository, UserMappingService mapping, BCryptPasswordEncoder encoder) {
         this.repository = repository;
         this.mapping = mapping;
         this.encoder = encoder;
+        this.refreshStorage = new HashMap<>();
     }
 
     @Transactional
-    public Response registerUser(RegistrationForm form) {
+    public TokenResponseDto registerUser(RegistrationForm form) {
         User foundUser = repository.findByUsername(form.getUsername());
         if (foundUser != null) {
             throw new UserAlreadyExistsException("User with this name already exists!");
         }
         User user = mapping.mapRegistrationFormToUser(form);
-        repository.save(user);
+       User newUser = repository.save(user);
+       String username = newUser.getUsername();
+        String accessToken = tokenService.generateAccessToken(newUser);
+        String refreshToken = tokenService.generateRefreshToken(newUser);
+        refreshStorage.put(username, refreshToken);
+        return new TokenResponseDto(accessToken, refreshToken,
+                "User " + newUser.getName() + " " + newUser.getSurname() + " successfully registered!");
 
-        return new Response("OK", "User " + user.getName() + " " + user.getSurname() + " successfully registered!");
+
+
     }
 
 

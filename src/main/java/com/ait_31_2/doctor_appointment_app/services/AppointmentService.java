@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.services;
 
+import com.ait_31_2.doctor_appointment_app.domain.NewAppointmentRequest;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Appointment;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
@@ -28,10 +29,11 @@ public class AppointmentService {
     private final SlotRepository slotRepository;
 
 
-    public List<AppointmentDto> getAllAppointmentsPatient(int patientId, LocalDate timeStart, LocalDate timeEnd) {
+    public List<AppointmentDto> getAllAppointmentsPatient(LocalDate timeStart, LocalDate timeEnd) {
         if (timeStart.isAfter(timeEnd)) {
             throw new IllegalArgumentException("The start time must not be later than the end time!");
         }
+        int patientId = getUserId();
         return repository.findAllAppointmentsPatientByDataInterval(patientId, timeStart, timeEnd)
                 .stream()
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
@@ -39,7 +41,8 @@ public class AppointmentService {
 
     }
 
-    public List<AppointmentDto> getFutureAppointmentsPatient(int patientId) {
+    public List<AppointmentDto> getFutureAppointmentsPatient() {
+        int patientId = getUserId();
         return repository.findFutureAppointments(patientId)
                 .stream()
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
@@ -48,17 +51,20 @@ public class AppointmentService {
     }
 
 
-    public List<AppointmentDto> getPastAppointmentsPatient(int patientId) {
+    public List<AppointmentDto> getPastAppointmentsPatient() {
+        int patientId = getUserId();
         return repository.findPastAppointments(patientId)
                 .stream()
-                .filter(appointment -> appointment.isVisitComplete())
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
                 .toList();
 
     }
 
 
-    public int saveNewAppointment(LocalDate date, int userId1, int slotId) {
+    public int saveNewAppointment(NewAppointmentRequest request) {
+        LocalDate date = request.getDate();
+        int userId1 = request.getUserId1();
+        int slotId = request.getSlotId();
 
         int userId2 = getUserId();
         Appointment newAppointment = new Appointment();
