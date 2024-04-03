@@ -3,14 +3,14 @@ package com.ait_31_2.doctor_appointment_app.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class NewAppointmentRequest {
+public class AppointmentRequest {
 
     private int appointmentId;
     private LocalDate date;
     private int userId1;
     private int slotId;
 
-    public NewAppointmentRequest(int appointmentId, LocalDate date, int userId1, int slotId) {
+    public AppointmentRequest(int appointmentId, LocalDate date, int userId1, int slotId) {
         this.appointmentId = appointmentId;
         this.date = date;
         this.userId1 = userId1;
@@ -40,7 +40,7 @@ public class NewAppointmentRequest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewAppointmentRequest that)) return false;
+        if (!(o instanceof AppointmentRequest that)) return false;
         return getAppointmentId() == that.getAppointmentId() && getUserId1() == that.getUserId1() && getSlotId() == that.getSlotId() && Objects.equals(getDate(), that.getDate());
     }
 

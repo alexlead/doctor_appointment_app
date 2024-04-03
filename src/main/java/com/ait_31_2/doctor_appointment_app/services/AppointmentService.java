@@ -1,6 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.services;
 
-import com.ait_31_2.doctor_appointment_app.domain.NewAppointmentRequest;
+import com.ait_31_2.doctor_appointment_app.domain.AppointmentRequest;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Appointment;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
@@ -66,7 +66,7 @@ public class AppointmentService {
     }
 
 
-    public int saveNewAppointment(NewAppointmentRequest request) {
+    public int saveAppointment(AppointmentRequest request) {
         LocalDate date = request.getDate();
         int userId1 = request.getUserId1();
         int slotId = request.getSlotId();
@@ -74,37 +74,68 @@ public class AppointmentService {
         int userId2 = getUserId();
 
         int appointmentId = request.getAppointmentId();
-        Appointment newAppointment = new Appointment();
+        Appointment existingAppointment = repository.findById(appointmentId).orElse(null);
+        if(appointmentId!=0 && existingAppointment !=null) {
+            existingAppointment.setDate(date);
+            Slot slot = slotRepository.findById(slotId).orElse(null);
+            existingAppointment.setSlotId(slot);
+            existingAppointment.setVisitComplete(true);
 
-        newAppointment.setDate(date);
-
-        Slot slot = slotRepository.findById(slotId).orElse(null);
-        newAppointment.setSlotId(slot);
-        newAppointment.setVisitComplete(true);
-
-
-        User user1 = userRepository.findById(userId1).orElse(null);
-        if (user1 != null) {
-            if (hasRole(user1, "ROLE_DOCTOR")) {
-                newAppointment.setDoctorId(user1);
-            } else if (hasRole(user1, "ROLE_PATIENT")) {
-                newAppointment.setPatientId(user1);
+            User user1 = userRepository.findById(userId1).orElse(null);
+            if (user1 != null) {
+                if (hasRole(user1, "ROLE_DOCTOR")) {
+                    existingAppointment.setDoctorId(user1);
+                } else if (hasRole(user1, "ROLE_PATIENT")) {
+                    existingAppointment.setPatientId(user1);
+                }
             }
-        }
 
-        User user2 = userRepository.findById(userId2).orElse(null);
-        if (user2 != null) {
-            if (hasRole(user2, "ROLE_PATIENT")) {
-                newAppointment.setPatientId(user2);
-            } else if (hasRole(user2, "ROLE_DOCTOR")) {
-                newAppointment.setDoctorId(user2);
+            User user2 = userRepository.findById(userId2).orElse(null);
+            if (user2 != null) {
+                if (hasRole(user2, "ROLE_PATIENT")) {
+                   existingAppointment.setPatientId(user2);
+                } else if (hasRole(user2, "ROLE_DOCTOR")) {
+                    existingAppointment.setDoctorId(user2);
+                }
             }
+
+            Appointment saveAppointment = repository.save(existingAppointment);
+            return saveAppointment.getId();
+
+        }else {
+            Appointment newAppointment = new Appointment();
+
+            newAppointment.setDate(date);
+
+            Slot slot = slotRepository.findById(slotId).orElse(null);
+            newAppointment.setSlotId(slot);
+            newAppointment.setVisitComplete(true);
+
+
+            User user1 = userRepository.findById(userId1).orElse(null);
+            if (user1 != null) {
+                if (hasRole(user1, "ROLE_DOCTOR")) {
+                    newAppointment.setDoctorId(user1);
+                } else if (hasRole(user1, "ROLE_PATIENT")) {
+                    newAppointment.setPatientId(user1);
+                }
+            }
+
+            User user2 = userRepository.findById(userId2).orElse(null);
+            if (user2 != null) {
+                if (hasRole(user2, "ROLE_PATIENT")) {
+                    newAppointment.setPatientId(user2);
+                } else if (hasRole(user2, "ROLE_DOCTOR")) {
+                    newAppointment.setDoctorId(user2);
+                }
+            }
+
+
+            Appointment saveAppointment = repository.save(newAppointment);
+
+
+            return saveAppointment.getId();
         }
-
-
-        Appointment saveAppointment = repository.save(newAppointment);
-
-        return saveAppointment.getId();
     }
 
     private int getUserId() {
@@ -120,6 +151,8 @@ public class AppointmentService {
         return user.getRoles().stream()
                 .anyMatch(role -> role.getAuthority().equals(roleName));
     }
+
+
 
 
 }
