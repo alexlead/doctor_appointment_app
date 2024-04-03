@@ -3,6 +3,7 @@ package com.ait_31_2.doctor_appointment_app.controllers;
 import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
+import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,12 +30,12 @@ public class UserController {
             summary = "Registration",
             description = "Registration in app 'Doctor appointment system'. Available to all users."
     )
-    public Response register(
+    public TokenResponseDto register(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User`s object")
             RegistrationForm form
             ) {
-        Response response = service.registerUser(form);
+        TokenResponseDto response = service.registerUser(form);
         return response;
     }
 
