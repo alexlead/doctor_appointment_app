@@ -52,7 +52,6 @@ public class AppointmentService {
     public List<AppointmentDto> getPastAppointmentsPatient(int patientId) {
         return repository.findPastAppointments(patientId)
                 .stream()
-                .filter(appointment -> appointment.isVisitComplete())
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
                 .toList();
 
