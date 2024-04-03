@@ -28,10 +28,11 @@ public class AppointmentService {
     private final SlotRepository slotRepository;
 
 
-    public List<AppointmentDto> getAllAppointmentsPatient(int patientId, LocalDate timeStart, LocalDate timeEnd) {
+    public List<AppointmentDto> getAllAppointmentsPatient(LocalDate timeStart, LocalDate timeEnd) {
         if (timeStart.isAfter(timeEnd)) {
             throw new IllegalArgumentException("The start time must not be later than the end time!");
         }
+        int patientId = getUserId();
         return repository.findAllAppointmentsPatientByDataInterval(patientId, timeStart, timeEnd)
                 .stream()
                 .map(a -> appointmentMappingService.mapEntityToDto(a))
