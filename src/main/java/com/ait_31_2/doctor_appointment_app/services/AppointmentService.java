@@ -13,6 +13,7 @@ import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.AuthInfo;
 import com.ait_31_2.doctor_appointment_app.services.mapping.AppointmentMappingService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,26 +31,56 @@ public class AppointmentService {
     private final UserRepository userRepository;
     private final SlotRepository slotRepository;
 
-
-    public List<AppointmentDto> getAllAppointmentsPatient(LocalDate timeStart, LocalDate timeEnd) {
+    @Transactional
+    public List<AppointmentDto> getAllAppointments(LocalDate timeStart, LocalDate timeEnd) {
         if (timeStart.isAfter(timeEnd)) {
             throw new IllegalArgumentException("The start time must not be later than the end time!");
         }
-        int patientId = getUserId();
-        return repository.findAllAppointmentsPatientByDataInterval(patientId, timeStart, timeEnd)
-                .stream()
-                .map(a -> appointmentMappingService.mapEntityToDto(a))
-                .toList();
+        int userId = getUserId();
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (!(hasRole(user, "ROLE_DOCTOR")) && !(hasRole(user, "ROLE_PATIENT"))) {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
+        if (hasRole(user, "ROLE_PATIENT")) {
+            return repository.findAllAppointmentsPatientByDataInterval(userId, timeStart, timeEnd)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
+                    .toList();
+        } else if (hasRole(user, "ROLE_DOCTOR")) {
+            return repository.findAllAppointmentsDoctorByDataInterval(userId, timeStart, timeEnd)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoDoctor(a))
+                    .toList();
+
+        } else {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
 
     }
 
+    @Transactional
     public List<AppointmentDto> getFutureAppointmentsPatient() {
-        int patientId = getUserId();
-        return repository.findFutureAppointments(patientId)
-                .stream()
-                .map(a -> appointmentMappingService.mapEntityToDto(a))
-                .toList();
+        int userId = getUserId();
+        User user = userRepository.findById(userId).orElse(null);
 
+        if (!(hasRole(user, "ROLE_DOCTOR")) && !(hasRole(user, "ROLE_PATIENT"))) {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
+        if (hasRole(user, "ROLE_PATIENT")) {
+            return repository.findFutureAppointmentsPatient(userId)
+                    .stream()
+                    .map(a -> appointmentMappingService.mapEntityToDtoPatient(a))
+                    .toList();
+        } else if (hasRole(user, "ROLE_DOCTOR")) {
+            return repository.findFutureAppointmentsDoctor(userId)
+                    .stream()
+                    .map(appointmentMappingService::mapEntityToDtoDoctor)
+                    .toList();
+
+        } else {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
     }
 
 
@@ -57,12 +88,12 @@ public class AppointmentService {
         int patientId = getUserId();
         return repository.findPastAppointments(patientId)
                 .stream()
-                .map(a -> appointmentMappingService.mapEntityToDto(a))
+                .map(appointmentMappingService::mapEntityToDtoPatient)
                 .toList();
 
     }
 
-
+    @Transactional
     public AppointmentDto getAppointmentById(int id) throws AccessDeniedException {
         Appointment appointment = repository.findById(id).orElse(null);
         if (appointment == null) {
@@ -79,7 +110,7 @@ public class AppointmentService {
         }
     }
 
-
+    @Transactional
     public int saveAppointment(AppointmentRequest request) {
         LocalDate date = request.getDate();
         int userId1 = request.getUserId1();
@@ -164,6 +195,25 @@ public class AppointmentService {
     private boolean hasRole(User user, String roleName) {
         return user.getRoles().stream()
                 .anyMatch(role -> role.getAuthority().equals(roleName));
+    }
+
+    @Transactional
+    public void deleteById(int id) throws AccessDeniedException {
+        int userId = getUserId();
+        Appointment appointment = repository.findById(id).orElse(null);
+        if (appointment == null) {
+            throw new AppointmentNotFoundException("Appointment with ID " + id + " not found.");
+        }
+
+        User patientUser = appointment.getPatientId();
+        User doctorUser = appointment.getDoctorId();
+        if (userId == patientUser.getId() || userId == doctorUser.getId()) {
+            appointment.setVisitComplete(false);
+
+        } else {
+            throw new AccessDeniedException("Access denied!");
+        }
+
     }
 
 

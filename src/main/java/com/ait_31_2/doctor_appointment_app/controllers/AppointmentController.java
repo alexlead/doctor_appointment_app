@@ -22,22 +22,22 @@ public class AppointmentController {
 
     private final AppointmentService service;
 
-    @GetMapping("/patient/{timeStart}/{timeEnd}")
+    @GetMapping("/{timeStart}/{timeEnd}")
     @Operation(
             summary = "",
             description = ""
     )
     public List<AppointmentDto> getAllAppointments(@PathVariable @Parameter(description = "2024-02-25") LocalDate timeStart,
                                                    @PathVariable @Parameter(description = "2024-03-25") LocalDate timeEnd) {
-        return service.getAllAppointmentsPatient(timeStart, timeEnd);
+        return service.getAllAppointments(timeStart, timeEnd);
     }
 
-    @GetMapping("/patient/future/")
+    @GetMapping("/upcoming/")
     public List<AppointmentDto> getFutureAppointments() {
         return service.getFutureAppointmentsPatient();
     }
 
-    @GetMapping("patient/past/")
+    @GetMapping("/previous/")
     public List<AppointmentDto> getPastAppointments() {
         return service.getPastAppointmentsPatient();
     }
@@ -51,6 +51,11 @@ public class AppointmentController {
     @GetMapping("/{id}")
     public AppointmentDto getById(@PathVariable int id)throws AccessDeniedException {
         return service.getAppointmentById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) throws AccessDeniedException {
+        service.deleteById(id);
     }
 
 

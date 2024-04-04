@@ -12,20 +12,29 @@ public class AppointmentMappingService {
     @Autowired
     UserMappingService userMappingService;
 
-
-    public AppointmentDto mapEntityToDto(Appointment appointment) {
+// TODO
+    public AppointmentDto mapEntityToDtoPatient(Appointment appointment) {
         User userId = (appointment.getDoctorId());
         UserDto doctorId = userMappingService.mapUserToDtoName(userId);
 
         return new AppointmentDto(appointment.getId(),null, doctorId, appointment.getSlotId(),
                 appointment.getDate(), appointment.isVisitComplete());
 
+    }
+    public AppointmentDto mapEntityToDtoDoctor(Appointment appointment) {
+        User userId = (appointment.getPatientId());
+        UserDto patientId = userMappingService.mapUserToDtoName(userId);
+
+        return new AppointmentDto(appointment.getId(),patientId, null, appointment.getSlotId(),
+                appointment.getDate(), appointment.isVisitComplete());
 
     }
+
+
 
     public AppointmentDto mapAppointmentToDto(Appointment appointment){
         UserDto patientId = userMappingService.mapUserToDtoName(appointment.getPatientId());
         UserDto doctorId = userMappingService.mapUserToDtoName(appointment.getDoctorId());
-        return new AppointmentDto(appointment.getId(),patientId,doctorId,appointment.getSlotId(),appointment.getDate());
+        return new AppointmentDto(appointment.getId(),patientId,doctorId,appointment.getSlotId(),appointment.getDate(), true);
     }
 }
