@@ -53,5 +53,10 @@ public class AppointmentController {
         return service.getAppointmentById(id);
     }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) throws AccessDeniedException {
+        service.deleteById(id);
+    }
+
 
 }

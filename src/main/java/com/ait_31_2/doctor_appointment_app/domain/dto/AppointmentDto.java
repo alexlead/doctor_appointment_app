@@ -33,13 +33,7 @@ public class AppointmentDto {
         this.visitComplete = visitComplete;
     }
 
-    public AppointmentDto(int id,UserDto patientId, UserDto doctorId, Slot slotId, LocalDate date) {
-        this.id = id;
-        this.patientId = patientId;
-        this.doctorId = doctorId;
-        this.slotId = slotId;
-        this.date = date;
-    }
+
 
     public int getId() {
         return id;

@@ -71,6 +71,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/previous/").hasRole("PATIENT")
                                 .requestMatchers(HttpMethod.POST, "/api/appointments/").hasAnyRole("PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/{id}").hasAnyRole("PATIENT", "DOCTOR")
+                                .requestMatchers(HttpMethod.DELETE, "/api/appointments/{id}").hasAnyRole("PATIENT", "DOCTOR")
 
 
                                 .anyRequest().authenticated()// все, что не перечисленно выше, доступно аутентифицированным пользователям
