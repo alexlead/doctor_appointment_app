@@ -61,4 +61,20 @@ public class CommonAdvice {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Response> handleException(UserNotFoundException e) {
+        e.printStackTrace();
+        Response response = new Response("ERROR",e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SlotNotFoundException.class)
+    public ResponseEntity<Response> handleException(SlotNotFoundException e) {
+        e.printStackTrace();
+        Response response = new Response("ERROR",e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

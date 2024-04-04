@@ -30,8 +30,7 @@ public class UserService implements UserDetailsService {
     private BCryptPasswordEncoder encoder;
     @Autowired
     private TokenService tokenService;
-    private Map<String,String > refreshStorage;
-
+    private Map<String, String> refreshStorage;
 
 
     public UserService(UserRepository repository, UserMappingService mapping, BCryptPasswordEncoder encoder) {
@@ -48,14 +47,13 @@ public class UserService implements UserDetailsService {
             throw new UserAlreadyExistsException("User with this name already exists!");
         }
         User user = mapping.mapRegistrationFormToUser(form);
-       User newUser = repository.save(user);
-       String username = newUser.getUsername();
+        User newUser = repository.save(user);
+        String username = newUser.getUsername();
         String accessToken = tokenService.generateAccessToken(newUser);
         String refreshToken = tokenService.generateRefreshToken(newUser);
         refreshStorage.put(username, refreshToken);
         return new TokenResponseDto(accessToken, refreshToken,
                 "User " + newUser.getName() + " " + newUser.getSurname() + " successfully registered!");
-
 
 
     }
