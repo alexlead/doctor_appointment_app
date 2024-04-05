@@ -125,9 +125,7 @@ public class AppointmentService {
 
         int appointmentId = request.getAppointmentId();
         Appointment existingAppointment = repository.findById(appointmentId).orElse(null);
-        if (existingAppointment == null) {
-            throw new AppointmentNotFoundException("Appointment with ID " + appointmentId + " not found.");
-        }
+
         if (appointmentId != 0 && existingAppointment != null) {
             existingAppointment.setDate(date);
             Slot slot = slotRepository.findById(slotId).orElse(null);
