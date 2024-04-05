@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
     public List<UserDto> getUserByRole(String role) {
         return repository.findAllByRole(role)
                 .stream()
-                .map(user -> mapping.mapUserToDto(user))
+                .map(user -> mapping.mapUserToDtoName(user))
                 .toList();
     }
 
