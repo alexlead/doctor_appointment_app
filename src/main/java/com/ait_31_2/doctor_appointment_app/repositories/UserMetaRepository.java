@@ -14,7 +14,7 @@ public interface UserMetaRepository extends JpaRepository<UserMeta, Integer> {
     @Query(value = "SELECT * FROM user_meta WHERE user_id = :userId", nativeQuery = true)
     Collection<UserMeta> findAllByUserId(@Param("userId") int userId);
 
-    @Query(value = "SELECT * FROM user_meta WHERE user_id = :userId AND meta_key LIKE (:meta_key) LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM user_meta WHERE (user_id = :userId) AND meta_key LIKE (:meta_key) LIMIT 1", nativeQuery = true)
     UserMeta findByUserIdAndMetaKey(@Param("userId") int userId, @Param("meta_key") String metaKey);
 
     @Transactional
