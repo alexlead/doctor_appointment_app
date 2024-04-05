@@ -48,24 +48,24 @@ public class SecurityConfig {
                         x -> x
 
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
                                 .requestMatchers(HttpMethod.GET, "/api/users/{userid}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/users/").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users/doctor/{id}").hasAnyRole("ADMIN", "PATIENT")
                                 .requestMatchers(HttpMethod.GET, "/api/users/doctors/").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/users/patient/{partName}").hasAnyRole("ADMIN", "DOCTOR")
+                                .requestMatchers(HttpMethod.GET, "/api/users/patient/{partName}").hasRole("DOCTOR")
+
                                 .requestMatchers(HttpMethod.GET, "/api/auth/logout").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login", "api/auth/refresh", "/api/auth/logout").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/profile").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
-                                .requestMatchers(HttpMethod.DELETE, "/api/profile").hasAnyRole(
-                                        "ADMIN","PATIENT","DOCTOR")
+
+                                .requestMatchers(HttpMethod.GET, "/api/profile").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
+                                .requestMatchers(HttpMethod.PUT, "/api/profile").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
+                                .requestMatchers(HttpMethod.DELETE, "/api/profile").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
 
 
                                 .requestMatchers(HttpMethod.GET, "/api/slots/{data}/{id}").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
-                                //.requestMatchers(HttpMethod.GET, "/api/slots/").hasAnyRole("ADMIN", "PATIENT", "DOCTOR")
+
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/{timeStart}/{timeEnd}").hasAnyRole("PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/upcoming/").hasAnyRole("PATIENT", "DOCTOR")
                                 .requestMatchers(HttpMethod.GET, "/api/appointments/previous/").hasRole("PATIENT")

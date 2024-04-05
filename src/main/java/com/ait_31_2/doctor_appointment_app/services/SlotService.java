@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class SlotService  {
+public class SlotService {
 
 
     private SlotRepository repository;
@@ -23,26 +23,25 @@ public class SlotService  {
     }
 
 
-
     private List<Slot> getAllSlots() {
         return repository.findAll();
     }
 
 
-    public Slot getSlotById(int id) {
-        return repository.findById(id).orElse(null);
-    }
+//    public Slot getSlotById(int id) {
+//        return repository.findById(id).orElse(null);
+//    }
 
     private List<Slot> getAllFreeSlotByDateAndDoctorId(LocalDate date, int doctorId) {
-              List<Slot> slots =  repository.findFreeSlotsByDateAndDoctorId(date, doctorId);
-        if (slots==null){
+        List<Slot> slots = repository.findFreeSlotsByDateAndDoctorId(date, doctorId);
+        if (slots == null) {
             throw new NotFreeSlotsException("There are not free slots on this date!");
         }
 
         return slots;
     }
 
-    public SlotResponse getSlotsList(LocalDate date, int doctorId){
+    public SlotResponse getSlotsList(LocalDate date, int doctorId) {
         List<Slot> allSlots = getAllSlots();
         List<Slot> freeSlots = getAllFreeSlotByDateAndDoctorId(date, doctorId);
         SlotResponse response = new SlotResponse();
@@ -50,8 +49,6 @@ public class SlotService  {
         response.setFree(freeSlots);
         return response;
     }
-
-
 
 
 }

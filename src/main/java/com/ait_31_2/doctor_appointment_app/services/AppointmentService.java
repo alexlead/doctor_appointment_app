@@ -7,6 +7,8 @@ import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.AppointmentDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.AccessDeniedException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.AppointmentNotFoundException;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.SlotNotFoundException;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserNotFoundException;
 import com.ait_31_2.doctor_appointment_app.repositories.AppointmentRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.RoleRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.SlotRepository;
@@ -63,6 +65,9 @@ public class AppointmentService {
     public List<AppointmentDto> getFutureAppointmentsPatient() {
         int userId = getUserId();
         User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException("User not found!");
+        }
 
         if (!(hasRole(user, "ROLE_DOCTOR")) && !(hasRole(user, "ROLE_PATIENT"))) {
             throw new IllegalArgumentException("Invalid user role!");
@@ -120,6 +125,9 @@ public class AppointmentService {
 
         int appointmentId = request.getAppointmentId();
         Appointment existingAppointment = repository.findById(appointmentId).orElse(null);
+        if (existingAppointment == null) {
+            throw new AppointmentNotFoundException("Appointment with ID " + appointmentId + " not found.");
+        }
         if (appointmentId != 0 && existingAppointment != null) {
             existingAppointment.setDate(date);
             Slot slot = slotRepository.findById(slotId).orElse(null);
@@ -127,6 +135,9 @@ public class AppointmentService {
             existingAppointment.setVisitComplete(true);
 
             User user1 = userRepository.findById(userId1).orElse(null);
+            if (user1 == null) {
+                throw new UserNotFoundException("User not found!");
+            }
             if (user1 != null) {
                 if (hasRole(user1, "ROLE_DOCTOR")) {
                     existingAppointment.setDoctorId(user1);
@@ -136,6 +147,9 @@ public class AppointmentService {
             }
 
             User user2 = userRepository.findById(userId2).orElse(null);
+            if (user2 == null) {
+                throw new UserNotFoundException("User not found!");
+            }
             if (user2 != null) {
                 if (hasRole(user2, "ROLE_PATIENT")) {
                     existingAppointment.setPatientId(user2);
@@ -153,11 +167,17 @@ public class AppointmentService {
             newAppointment.setDate(date);
 
             Slot slot = slotRepository.findById(slotId).orElse(null);
+            if (slot == null) {
+                throw new SlotNotFoundException("Slot not found!");
+            }
             newAppointment.setSlotId(slot);
             newAppointment.setVisitComplete(true);
 
 
             User user1 = userRepository.findById(userId1).orElse(null);
+            if (user1 == null) {
+                throw new UserNotFoundException("User not found!");
+            }
             if (user1 != null) {
                 if (hasRole(user1, "ROLE_DOCTOR")) {
                     newAppointment.setDoctorId(user1);
@@ -167,6 +187,9 @@ public class AppointmentService {
             }
 
             User user2 = userRepository.findById(userId2).orElse(null);
+            if (user2 == null) {
+                throw new UserNotFoundException("User not found!");
+            }
             if (user2 != null) {
                 if (hasRole(user2, "ROLE_PATIENT")) {
                     newAppointment.setPatientId(user2);
@@ -208,7 +231,7 @@ public class AppointmentService {
         User patientUser = appointment.getPatientId();
         User doctorUser = appointment.getDoctorId();
         if (userId == patientUser.getId() || userId == doctorUser.getId()) {
-            appointment.setVisitComplete(false);
+            repository.deleteById(id);
 
         } else {
             throw new AccessDeniedException("Access denied!");
