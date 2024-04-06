@@ -1,6 +1,7 @@
 package com.ait_31_2.doctor_appointment_app.controllers;
 
 import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
+import com.ait_31_2.doctor_appointment_app.domain.dto.DoctorDto;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
@@ -55,6 +56,15 @@ public class UserController {
     )
     public List<UserDto> getAllDoctors() {
         return service.getAllDoctors();
+    }
+
+    @GetMapping("/doctorslist/")
+    @Operation(
+            summary = "All Doctors with Photo",
+            description = "View list of all doctors. Available to all users."
+    )
+    public List<DoctorDto> getAllDoctorsWithPhoto() {
+        return service.getAllDoctorsWithPhoto();
     }
 
     @GetMapping("/doctor/{id}")
