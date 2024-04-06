@@ -2,13 +2,16 @@ package com.ait_31_2.doctor_appointment_app.services;
 
 import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
+import com.ait_31_2.doctor_appointment_app.domain.dto.DoctorDto;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.DoctorNotFoundException;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
+import com.ait_31_2.doctor_appointment_app.repositories.UserMetaRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
 import com.ait_31_2.doctor_appointment_app.security.security_service.TokenService;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,14 +21,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
 
     private UserRepository repository;
+    private UserMetaRepository doctorDtoRepository;
     private UserMappingService mapping;
     private BCryptPasswordEncoder encoder;
     @Autowired
@@ -33,8 +39,9 @@ public class UserService implements UserDetailsService {
     private Map<String, String> refreshStorage;
 
 
-    public UserService(UserRepository repository, UserMappingService mapping, BCryptPasswordEncoder encoder) {
+    public UserService(UserRepository repository, UserMetaRepository doctorDtoRepository, UserMappingService mapping, BCryptPasswordEncoder encoder) {
         this.repository = repository;
+        this.doctorDtoRepository = doctorDtoRepository;
         this.mapping = mapping;
         this.encoder = encoder;
         this.refreshStorage = new HashMap<>();
@@ -70,6 +77,23 @@ public class UserService implements UserDetailsService {
     public List<UserDto> getAllDoctors() {
         return getUserByRole("ROLE_DOCTOR");
 
+    }
+
+    public List<DoctorDto> getAllDoctorsWithPhoto () {
+
+        Collection<Tuple> doctors = doctorDtoRepository.getAllDoctorsWithPhoto();
+
+        List<DoctorDto> doctorDtos = doctors.stream()
+                .map(t -> new DoctorDto(
+                        t.get(0, Integer.class),
+                        t.get(1, String.class),
+                        t.get(2, String.class),
+                        t.get(3, String.class)
+
+                ))
+                .toList();
+
+        return doctorDtos;
     }
 
 
