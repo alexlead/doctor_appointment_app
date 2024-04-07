@@ -1,5 +1,6 @@
 package com.ait_31_2.doctor_appointment_app.domain.classes;
 
+import com.ait_31_2.doctor_appointment_app.services.UserService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -13,6 +14,12 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * A class describing the user (patient, doctor) of the application.
+ * The {@link UserService} class is designed to work with users.
+ * @author Tetiana
+ * @version 1.1.0
+ */
 
 @Entity
 @Table(name = "user")
