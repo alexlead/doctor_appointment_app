@@ -3,12 +3,14 @@ package com.ait_31_2.doctor_appointment_app.controllers;
 import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
 import com.ait_31_2.doctor_appointment_app.domain.dto.DoctorDto;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
-import com.ait_31_2.doctor_appointment_app.exception_handling.Response;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,13 +33,19 @@ public class UserController {
             summary = "Registration",
             description = "Registration in app 'Doctor appointment system'. Available to all users."
     )
-    public TokenResponseDto register(
+    public ResponseEntity<TokenResponseDto> register(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User`s object")
-            RegistrationForm form
-            ) {
-        TokenResponseDto response = service.registerUser(form);
-        return response;
+            RegistrationForm form, HttpServletResponse response
+            ){
+        TokenResponseDto tokenDto = service.registerUser(form);
+
+        Cookie cookie = new Cookie("Access-Token", tokenDto.getAccessToken());
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(tokenDto);
     }
 
     @GetMapping("/")
