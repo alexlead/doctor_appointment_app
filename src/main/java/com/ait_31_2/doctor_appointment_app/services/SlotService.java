@@ -28,9 +28,7 @@ public class SlotService {
     }
 
 
-//    public Slot getSlotById(int id) {
-//        return repository.findById(id).orElse(null);
-//    }
+
 
     private List<Slot> getAllFreeSlotByDateAndDoctorId(LocalDate date, int doctorId) {
         List<Slot> slots = repository.findFreeSlotsByDateAndDoctorId(date, doctorId);

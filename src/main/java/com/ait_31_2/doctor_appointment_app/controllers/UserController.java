@@ -89,7 +89,7 @@ public class UserController {
     @GetMapping("/patient/{partName}")
     @Operation(
             summary = "Find patient",
-            description = "Search for a patient by first letter of name. Available to doctors and administration."
+            description = "Search for a patient by first letter of name. Available to doctors."
     )
     public List<UserDto> getPatient(@PathVariable String partName) {
         return service.getPatientByName(partName);

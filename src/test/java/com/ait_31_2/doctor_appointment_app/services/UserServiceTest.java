@@ -1,6 +1,7 @@
 package com.ait_31_2.doctor_appointment_app.services;
 
 import com.ait_31_2.doctor_appointment_app.domain.RegistrationForm;
+import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.domain.dto.UserDto;
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -84,9 +86,28 @@ class UserServiceTest {
         verify(userRepository, times(1)).save(newUser);
     }
 
+
     @Test
-    void getAllUser() {
+    void testGetAllUser() {
+
+        User user1 = new User(1,"John", "Doe", "john@gmail.com", "password", null);
+        User user2 = new User(2,"Jane", "Smith", "jane@gmail.com", "password", null);
+
+        UserDto userDto1 = new UserDto(1, "John", "Doe", "john@gmail.com", null);
+        UserDto userDto2 = new UserDto(2, "Jane", "Smith", "jane@gmail.com", null);
+
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
+
+        when(userMappingService.mapUserToDto(user1)).thenReturn(userDto1);
+        when(userMappingService.mapUserToDto(user2)).thenReturn(userDto2);
+
+        List<UserDto> result = userService.getAllUser();
+
+        assertEquals(2, result.size());
+        assertEquals(userDto1, result.get(0));
+        assertEquals(userDto2, result.get(1));
     }
+
 
     @Test
     void testGetAllDoctors() {
@@ -101,19 +122,13 @@ class UserServiceTest {
         doctor2.setName("Doctor2");
         doctor2.setSurname("Surname2");
 
-        // Мокируем метод findAllByRole для UserRepository,
-        // чтобы возвращать фиктивные данные о врачах
         when(userRepository.findAllByRole("ROLE_DOCTOR")).thenReturn(Arrays.asList(doctor1, doctor2));
 
-        // Мокируем метод mapUserToDtoName для UserMappingService,
-        // чтобы возвращать фиктивные объекты UserDto
         when(userMappingService.mapUserToDtoName(doctor1)).thenReturn(new UserDto(1, "Doctor1", "Surname1", null, null));
         when(userMappingService.mapUserToDtoName(doctor2)).thenReturn(new UserDto(2, "Doctor2", "Surname2", null, null));
 
-        // Вызываем метод, который мы тестируем
         List<UserDto> doctors = userService.getAllDoctors();
 
-        // Проверяем ожидаемый результат
         assertEquals(2, doctors.size());
         assertEquals("Doctor1", doctors.get(0).getName());
         assertEquals("Surname1", doctors.get(0).getSurname());
@@ -121,23 +136,32 @@ class UserServiceTest {
         assertEquals("Surname2", doctors.get(1).getSurname());
     }
 
-    @Test
-    void getAllDoctorsWithPhoto() {
-    }
+
+
+
 
     @Test
-    void getDoctorById() {
+    void testGetPatientByName() {
+        List<User> patients = List.of(
+                new User(1,"John", "Doe", "john@gmail.com", "password", Set.of(new Role(1,"ROLE_PATIENT"))),
+                new User(2,"Jane", "Smith", "jane@gmail.com", "password", Set.of(new Role(1,"ROLE_PATIENT"))),
+                new User(3, "Joseph", "Smith", "joseph@gmail.com", "password", Set.of(new Role(1, "ROLE_DOCTOR")))
+        );
+
+        String partName = "Sm";
+        List<UserDto> expectedDtos = List.of(
+                new UserDto(2, "Jane", "Smith", "jane@gmail.com",Set.of(new Role(1,"ROLE_PATIENT")))
+
+        );
+
+        when(userRepository.findUserByPartName(partName)).thenReturn(patients);
+        when(userMappingService.mapUserToDto(patients.get(0))).thenReturn(expectedDtos.get(0));
+
+        List<UserDto> result = userService.getPatientByName(partName);
+
+        assertEquals(2, result.size());
+        assertEquals(expectedDtos.get(0), result.get(0));
     }
 
-    @Test
-    void getPatientByName() {
-    }
 
-    @Test
-    void getUserByRole() {
-    }
-
-    @Test
-    void getUserById() {
-    }
 }
