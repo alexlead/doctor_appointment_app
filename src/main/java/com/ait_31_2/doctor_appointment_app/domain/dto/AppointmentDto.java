@@ -3,8 +3,6 @@ package com.ait_31_2.doctor_appointment_app.domain.dto;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Slot;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
