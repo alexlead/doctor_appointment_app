@@ -14,20 +14,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controller class for managing users.
+ * Handles requests related to user registration, retrieval, and search.
+ */
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "User controller",
-        description = "")
+        description = "Handles requests related to user registration, retrieval, and search.")
 public class UserController {
-
+    /**
+     * Service layer dependency for handling user-related operations.
+     * @see UserService
+     */
     private UserService service;
 
     public UserController(UserService service) {
         this.service = service;
     }
 
-
+    /**
+     * Registers a new user in the application.
+     *
+     * @param form     RegistrationForm object containing user registration data.
+     * @param response HttpServletResponse object used to set authentication cookie.
+     * @return ResponseEntity<TokenResponseDto> containing access token for the newly registered user.
+     */
     @PostMapping("/registration")
     @Operation(
             summary = "Registration",
@@ -48,6 +60,11 @@ public class UserController {
         return ResponseEntity.ok(tokenDto);
     }
 
+    /**
+     * Retrieves a list of all users.
+     * Available to administration.
+     * @return a list of {@link UserDto} objects representing users.
+     */
     @GetMapping("/")
     @Operation(
             summary = "List of users",
@@ -57,6 +74,11 @@ public class UserController {
         return service.getAllUser();
     }
 
+    /**
+     * Retrieves a list of all doctors.
+     * Available to all users.
+     * @return a list of {@link UserDto} objects representing doctors.
+     */
     @GetMapping("/doctors/")
     @Operation(
             summary = "Doctors",
@@ -66,6 +88,11 @@ public class UserController {
         return service.getAllDoctors();
     }
 
+    /**
+     * Retrieves a list of all doctors with their photos.
+     * Available to all users.
+     * @return a list of {@link DoctorDto} objects representing doctors with photos.
+     */
     @GetMapping("/doctorslist/")
     @Operation(
             summary = "All Doctors with Photo",
@@ -75,6 +102,12 @@ public class UserController {
         return service.getAllDoctorsWithPhoto();
     }
 
+    /**
+     * Retrieves a doctor by ID.
+     * Available to registered patients and administration.
+     * @param id the ID of the doctor to retrieve
+     * @return a {@link UserDto} object representing the doctor
+     */
     @GetMapping("/doctor/{id}")
     @Operation(
             summary = "Find doctor",
@@ -86,6 +119,12 @@ public class UserController {
         return service.getDoctorById(id);
     }
 
+    /**
+     * Retrieves patients by the first letter of their name.
+     * Available to doctors.
+     * @param partName the first letter of the patient's name
+     * @return a list of {@link UserDto} objects representing patients
+     */
     @GetMapping("/patient/{partName}")
     @Operation(
             summary = "Find patient",
@@ -95,6 +134,12 @@ public class UserController {
         return service.getPatientByName(partName);
     }
 
+    /**
+     * Retrieves a user by ID.
+     * Available to administration.
+     * @param userid the ID of the user to retrieve
+     * @return a {@link UserDto} object representing the user
+     */
     @GetMapping("/{userid}")
     @Operation(
             summary = "Find user",

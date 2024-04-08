@@ -52,22 +52,14 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/refresh")
-
-    public ResponseEntity<TokenResponseDto> getNewRefreshToken(@RequestBody RefreshRequestDto request) {
-        TokenResponseDto accessToken = service.getAccessToken(request.getRefreshToken());
-        return ResponseEntity.ok(accessToken);
-    }
-
-
-//    @GetMapping("/logout")
-//    public void logout(HttpServletResponse response) {
-//        Cookie cookie = new Cookie("Access-Token", null);
-//        cookie.setPath("/api");
-//        cookie.setHttpOnly(true);
-//        cookie.setMaxAge(0);
-//        response.addCookie(cookie);
+//    @PostMapping("/refresh")
+//
+//    public ResponseEntity<TokenResponseDto> getNewRefreshToken(@RequestBody RefreshRequestDto request) {
+//        TokenResponseDto accessToken = service.getAccessToken(request.getRefreshToken());
+//        return ResponseEntity.ok(accessToken);
 //    }
+
+
 
     @GetMapping("/logout")
     @Operation(
