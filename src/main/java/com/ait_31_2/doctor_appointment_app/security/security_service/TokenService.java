@@ -3,7 +3,6 @@ package com.ait_31_2.doctor_appointment_app.security.security_service;
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
 import com.ait_31_2.doctor_appointment_app.repositories.RoleRepository;
-import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.AuthInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,13 +18,23 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * Service class for managing authentication tokens.
+ * Handles token generation, validation, and retrieval of token claims.
+ */
 @Service
 public class TokenService {
     private SecretKey accessKey;
     private SecretKey refreshKey;
     private RoleRepository roleRepository;
 
-
+    /**
+     * Constructs an instance of TokenService with the specified dependencies.
+     *
+     * @param accessKey      The access key used for generating access tokens.
+     * @param refreshKey     The refresh key used for generating refresh tokens.
+     * @param roleRepository The {@link RoleRepository} instance for retrieving user roles.
+     */
     public TokenService(@Value("${access.key}") String accessKey,
                         @Value("${refresh.key}") String refreshKey, RoleRepository roleRepository) {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessKey));
@@ -33,6 +42,12 @@ public class TokenService {
         this.roleRepository = roleRepository;
     }
 
+    /**
+     * Generates an access token for the specified user.
+     *
+     * @param user The {@link User} for whom the access token is generated.
+     * @return The generated access token.
+     */
     public String generateAccessToken(@Nonnull User user) {
         LocalDateTime currentDate = LocalDateTime.now();
         Instant expirationInstant = currentDate.plusDays(1).atZone(ZoneId.systemDefault()).toInstant();
@@ -49,7 +64,12 @@ public class TokenService {
                 .compact();
     }
 
-
+    /**
+     * Generates a refresh token for the specified user.
+     *
+     * @param user The {@link User} for whom the refresh token is generated.
+     * @return The generated refresh token.
+     */
     public String generateRefreshToken(@Nonnull User user) {
         LocalDateTime currentDate = LocalDateTime.now();
         Instant expirationInstant = currentDate.plusDays(14).atZone(ZoneId.systemDefault()).toInstant();
@@ -62,14 +82,33 @@ public class TokenService {
                 .compact();
     }
 
+    /**
+     * Validates an access token.
+     *
+     * @param accessToken The access token to validate.
+     * @return True if the access token is valid, false otherwise.
+     */
     public boolean validateAccessToken(@Nonnull String accessToken) {
         return validateToken(accessToken, accessKey);
     }
 
+    /**
+     * Validates a refresh token.
+     *
+     * @param refreshToken The refresh token to validate.
+     * @return True if the refresh token is valid, false otherwise.
+     */
     public boolean validateRefreshToken(@Nonnull String refreshToken) {
         return validateToken(refreshToken, refreshKey);
     }
 
+    /**
+     * Validates a  token, universal method
+     *
+     * @param token The refresh token to validate.
+     * @param key   The secret key to validate.
+     * @return True if the  token is valid, false otherwise.
+     */
     private boolean validateToken(@Nonnull String token, @Nonnull SecretKey key) {
         try {
             Jwts.parser()
@@ -82,14 +121,33 @@ public class TokenService {
         }
     }
 
+    /**
+     * Retrieves claims from an access token.
+     *
+     * @param accessToken The access token from which to retrieve claims.
+     * @return The claims extracted from the access token.
+     */
     public Claims getAccessClaims(@Nonnull String accessToken) {
         return getClaims(accessToken, accessKey);
     }
 
+    /**
+     * Retrieves claims from a refresh token.
+     *
+     * @param refreshToken The refresh token from which to retrieve claims.
+     * @return The claims extracted from the refresh token.
+     */
     public Claims getRefreshClaims(@Nonnull String refreshToken) {
         return getClaims(refreshToken, accessKey);
     }
 
+    /**
+     * Retrieves claims from a  token.
+     *
+     * @param token The refresh token to validate.
+     * @param key   The secret key to validate.
+     * @return The claims extracted from the token.
+     */
     private Claims getClaims(@Nonnull String token, @Nonnull SecretKey key) {
         return Jwts.parser()
                 .verifyWith(key)
@@ -98,6 +156,12 @@ public class TokenService {
                 .getPayload();
     }
 
+    /**
+     * Generates authentication information based on token claims.
+     *
+     * @param claims The claims extracted from a token.
+     * @return The AuthInfo object containing authentication details.
+     */
     public AuthInfo generateAuthInfo(Claims claims) {
         String username = claims.getSubject();
         String name = claims.get("name", String.class);

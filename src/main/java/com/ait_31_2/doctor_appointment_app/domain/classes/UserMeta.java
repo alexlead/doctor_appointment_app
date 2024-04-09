@@ -9,6 +9,13 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Objects;
 
+/**
+ * Entity class representing metadata associated with a user.
+ * Contains information about a specific metadata key-value pair.
+ *
+ * @author Alexander
+ * @version 1.1.0
+ */
 @Entity
 @Table(name = "user_meta")
 public class UserMeta implements UserMetaInterface {

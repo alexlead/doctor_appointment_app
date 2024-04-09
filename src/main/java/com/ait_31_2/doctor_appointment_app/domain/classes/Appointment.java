@@ -1,50 +1,61 @@
 package com.ait_31_2.doctor_appointment_app.domain.classes;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.Objects;
-
+/**
+ * Entity class representing an appointment.
+ * Contains information about a specific appointment, including ID, patient ID, doctor ID, slot ID, date, and visit completion status.
+ *
+ * @author Arman
+ * @version 1.0.0
+ */
 @Entity
 @Table(name = "appointment")
+@Schema(description = "Entity class representing an appointment")
 public class Appointment  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Schema(description = "The ID of the appointment")
     private int id;
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn (name = "patient_id", nullable = false)
+    @Schema(description = "The ID of the patient")
     private User patientId;
-
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", nullable = false)
+    @Schema(description = "The ID of the doctor")
     private User doctorId;
-
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "slot_id", nullable = false)
+    @Schema(description = "The ID of the slot")
     private Slot slotId;
-
-
     @NotNull
     @Column(name = "date")
+    @Schema(description = "The date of the appointment")
     private LocalDate date;
-
-
     @NotNull
     @Column(name = "visit_complete")
+    @Schema(description = "Indicates if the visit is complete or not")
     private boolean visitComplete;
 
     public Appointment() {
     }
-
+    /**
+     * Constructs a new Appointment object with the specified parameters.
+     *
+     * @param id            the ID of the appointment
+     * @param patientId     the ID of the patient
+     * @param doctorId      the ID of the doctor
+     * @param slotId        the ID of the slot
+     * @param date          the date of the appointment
+     * @param visitComplete the visit completion status
+     */
     public Appointment(int id, User patientId, User doctorId, Slot slotId, LocalDate date, boolean visitComplete) {
         this.id = id;
         this.patientId = patientId;

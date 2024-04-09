@@ -2,16 +2,32 @@ package com.ait_31_2.doctor_appointment_app.security.security_dto;
 
 import java.util.Objects;
 
+/**
+ * DTO class representing a token response.
+ */
 public class TokenResponseDto {
     private String accessToken;
     private String refreshToken;
     private String message;
 
+    /**
+     * Constructs a new TokenResponseDto with the specified access token and refresh token.
+     *
+     * @param accessToken  the access token
+     * @param refreshToken the refresh token
+     */
     public TokenResponseDto(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
+    /**
+     * Constructs a new TokenResponseDto with the specified access token, refresh token, and message.
+     *
+     * @param accessToken  the access token
+     * @param refreshToken the refresh token
+     * @param message      the message
+     */
     public TokenResponseDto(String accessToken, String refreshToken, String message) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

@@ -11,6 +11,9 @@ import java.util.List;
 /**
  * Controller class for managing user profile metadata.
  * Handles requests related to user profiles.
+ *
+ * @author Alexandr
+ * @version 1.0.0
  */
 @RestController
 @RequestMapping("/api/profile")

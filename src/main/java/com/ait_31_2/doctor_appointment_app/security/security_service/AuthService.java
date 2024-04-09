@@ -15,13 +15,24 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service class for managing user authentication.
+ * Handles user login, token generation, and authentication information retrieval.
+ */
 @Service
 public class AuthService {
     private UserService userService;
     private TokenService tokenService;
-    private Map<String,String > refreshStorage;
+    private Map<String, String> refreshStorage;
     private BCryptPasswordEncoder encoder;
 
+    /**
+     * Constructs an instance of AuthService with the specified dependencies.
+     *
+     * @param userService  The {@link UserService} instance for managing user data.
+     * @param tokenService The {@link TokenService} instance for token generation and validation.
+     * @param encoder      The BCryptPasswordEncoder instance for password encoding and validation.
+     */
     public AuthService(UserService userService, TokenService tokenService, BCryptPasswordEncoder encoder) {
         this.userService = userService;
         this.tokenService = tokenService;
@@ -29,6 +40,14 @@ public class AuthService {
         this.refreshStorage = new HashMap<>();
     }
 
+    /**
+     * Logs in a user based on the provided login credentials.
+     * Generates and returns an access token and refresh token upon successful login.
+     *
+     * @param inboundUser The {@link LoginForm} object containing user login credentials.
+     * @return A TokenResponseDto containing the generated access token and refresh token.
+     * @throws AuthException If the provided password is incorrect.
+     */
     public TokenResponseDto login(@Nonnull LoginForm inboundUser) throws AuthException {
         String username = inboundUser.getUsername();
         User foundUser = (User) userService.loadUserByUsername(username);
@@ -37,12 +56,19 @@ public class AuthService {
             String accessToken = tokenService.generateAccessToken(foundUser);
             String refreshToken = tokenService.generateRefreshToken(foundUser);
             refreshStorage.put(username, refreshToken);
-            return new TokenResponseDto(accessToken, refreshToken,"OK");
+            return new TokenResponseDto(accessToken, refreshToken, "OK");
         } else {
             throw new AuthException("Password is incorrect");
         }
     }
 
+    /**
+     * Retrieves a new access token based on the provided refresh token.
+     * Validates the refresh token and generates a new access token if the refresh token is valid.
+     *
+     * @param refreshToken The refresh token used to generate a new access token.
+     * @return A {@link TokenResponseDto} containing the new access token.
+     */
     public TokenResponseDto getAccessToken(@Nonnull String refreshToken) {
         if (tokenService.validateRefreshToken(refreshToken)) {
             Claims refreshClaims = tokenService.getRefreshClaims(refreshToken);
@@ -58,6 +84,11 @@ public class AuthService {
         return new TokenResponseDto(null, null);
     }
 
+    /**
+     * Retrieves authentication information for the current user.
+     *
+     * @return The {@link AuthInfo} object containing authentication details.
+     */
     public AuthInfo getAuthInfo() {
         return (AuthInfo) SecurityContextHolder.getContext().getAuthentication();
     }

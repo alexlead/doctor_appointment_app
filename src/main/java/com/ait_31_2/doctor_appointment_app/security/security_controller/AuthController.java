@@ -14,18 +14,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for managing authentication-related endpoints.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Authentication  controller",
         description = "")
 public class AuthController {
     private AuthService service;
-
+    /**
+     * Initializes the AuthController with the specified {@link AuthService}.
+     *
+     * @param service The AuthService to be used for authentication operations.
+     */
     public AuthController(AuthService service) {
         this.service = service;
     }
 
-
+    /**
+     * Endpoint for user authentication.
+     * Allows users to log in to the Doctor Appointment System.
+     *
+     * @param loginForm The login credentials provided by the user.
+     * @param response  The HttpServletResponse object for managing cookies.
+     * @return ResponseEntity containing the access token if authentication is successful,
+     *         otherwise returns a bad request with an error message.
+     */
     @PostMapping("/login")
     @Operation(
             summary = "Authentication",
@@ -60,7 +75,14 @@ public class AuthController {
 //    }
 
 
-
+    /**
+     * Endpoint for user logout.
+     * Allows authenticated users to log out of the Doctor Appointment System.
+     *
+     * @param request  The HttpServletRequest object for accessing cookies.
+     * @param response The HttpServletResponse object for managing cookies.
+     * @return A redirect to the home page after successful logout.
+     */
     @GetMapping("/logout")
     @Operation(
             summary = "Logout",

@@ -1,11 +1,29 @@
 package com.ait_31_2.doctor_appointment_app.domain.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
+/**
+ * DTO class representing metadata associated with a user.
+ * Contains information about a specific metadata key-value pair.
+ *
+ * @author Alexandr
+ * @version 1.0.0
+ */
+@Schema(description = "DTO class representing metadata associated with a user")
 public class UserMetaDto {
+    @Schema(description = "The metadata key")
     private String metaKey;
+    @Schema(description = "The metadata value")
     private String metaValue;
 
+    /**
+     * Constructs a new UserMetaDto object with the specified metadata key-value pair.
+     *
+     * @param metaKey   the metadata key
+     * @param metaValue the metadata value
+     */
     public UserMetaDto(String metaKey, String metaValue) {
         this.metaKey = metaKey;
         this.metaValue = metaValue;

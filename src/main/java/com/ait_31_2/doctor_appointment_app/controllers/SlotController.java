@@ -41,7 +41,7 @@ public class SlotController {
      */
     @GetMapping("/{date}/{id}")
     @Operation(
-            summary = "Slots",
+            summary = "Get all slots",
             description = "Displays slots for the current date 'Doctor appointment system'. Available to patients, doctors and administration."
     )
     public SlotResponse getSlots(@PathVariable @Parameter(description = "2024-03-25") LocalDate date,
