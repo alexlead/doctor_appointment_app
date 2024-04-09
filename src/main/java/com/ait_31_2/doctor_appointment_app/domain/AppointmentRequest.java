@@ -1,13 +1,28 @@
 package com.ait_31_2.doctor_appointment_app.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 import java.util.Objects;
-
+@Schema(
+        description = "Create new/update appointment form"
+)
 public class AppointmentRequest {
-
+    @Schema(
+            description = "Appointment id. If id = 0: create a new appointment, otherwise - edit the existing one",
+            example = "0")
     private int appointmentId;
+    @Schema(
+            description = "Date",
+            example = "2024-04-15")
     private LocalDate date;
+    @Schema(
+            description = "Patient or Doctor id",
+            example = "2")
     private int userId1;
+    @Schema(
+            description = "Slot id",
+            example = "3")
     private int slotId;
 
     public AppointmentRequest(int appointmentId, LocalDate date, int userId1, int slotId) {

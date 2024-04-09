@@ -88,13 +88,21 @@ public class AppointmentService {
         }
     }
 
-
+    @Transactional
     public List<AppointmentDto> getPastAppointmentsPatient() {
-        int patientId = getUserId();
-        return repository.findPastAppointments(patientId)
-                .stream()
-                .map(appointmentMappingService::mapEntityToDtoPatient)
-                .toList();
+        int userId = getUserId();
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException("User not found!");
+        }
+        if (hasRole(user, "ROLE_PATIENT")) {
+            return repository.findPastAppointments(userId)
+                    .stream()
+                    .map(u->appointmentMappingService.mapEntityToDtoPatient(u))
+                    .toList();
+        } else {
+            throw new IllegalArgumentException("Invalid user role!");
+        }
 
     }
 

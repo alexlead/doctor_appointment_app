@@ -13,7 +13,6 @@ import com.ait_31_2.doctor_appointment_app.security.security_service.TokenServic
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
 import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +24,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -34,16 +32,16 @@ public class UserService implements UserDetailsService {
     private UserMetaRepository doctorDtoRepository;
     private UserMappingService mapping;
     private BCryptPasswordEncoder encoder;
-    @Autowired
     private TokenService tokenService;
     private Map<String, String> refreshStorage;
 
-
-    public UserService(UserRepository repository, UserMetaRepository doctorDtoRepository, UserMappingService mapping, BCryptPasswordEncoder encoder) {
+    public UserService(UserRepository repository, UserMetaRepository doctorDtoRepository,
+                       UserMappingService mapping, BCryptPasswordEncoder encoder, TokenService tokenService) {
         this.repository = repository;
         this.doctorDtoRepository = doctorDtoRepository;
         this.mapping = mapping;
         this.encoder = encoder;
+        this.tokenService = tokenService;
         this.refreshStorage = new HashMap<>();
     }
 
@@ -79,7 +77,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public List<DoctorDto> getAllDoctorsWithPhoto () {
+    public List<DoctorDto> getAllDoctorsWithPhoto() {
 
         Collection<Tuple> doctors = doctorDtoRepository.getAllDoctorsWithPhoto();
 
