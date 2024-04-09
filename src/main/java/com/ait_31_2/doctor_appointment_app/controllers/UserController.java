@@ -38,7 +38,7 @@ public class UserController {
      *
      * @param form     RegistrationForm object containing user registration data.
      * @param response HttpServletResponse object used to set authentication cookie.
-     * @return ResponseEntity<TokenResponseDto> containing access token for the newly registered user.
+     * @return ResponseEntity {@link TokenResponseDto} containing access token for the newly registered user.
      */
     @PostMapping("/registration")
     @Operation(

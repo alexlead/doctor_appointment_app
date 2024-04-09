@@ -44,7 +44,6 @@ public class UserMetaController {
      * Retrieves the user profile metadata for the authenticated user.
      *
      * @param profile List of UserMetaDto objects containing metadata fields to be deleted.
-     * @return List of {@link UserMetaDto} objects representing user profile metadata
      */
     @PutMapping
     @Operation(summary = "Update User Profile Metadata",
