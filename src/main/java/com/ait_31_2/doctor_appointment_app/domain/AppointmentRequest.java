@@ -4,6 +4,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 import java.util.Objects;
+
+/**
+ * Form for creating new appointment or modification of existing.
+ *
+ * Represents the data required to create a new appointment or modify an existing one,
+ *   including appointment ID, date, patient or doctor ID, slot ID.
+ *
+ */
 @Schema(
         description = "Create new/update appointment form"
 )

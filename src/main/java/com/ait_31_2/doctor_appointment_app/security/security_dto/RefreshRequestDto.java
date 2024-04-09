@@ -1,20 +1,27 @@
 package com.ait_31_2.doctor_appointment_app.security.security_dto;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Objects;
 
+/**
+ * Data transfer object (DTO) representing a request to refresh an access token.
+ */
 public class RefreshRequestDto {
 
     private String refreshToken;
+
+    /**
+     * Constructs a new RefreshRequestDto with the specified refresh token.
+     *
+     * @param refreshToken The refresh token.
+     */
+    public RefreshRequestDto(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
     public String getRefreshToken() {
         return refreshToken;
     }
 
-    public RefreshRequestDto(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 
     @Override
     public boolean equals(Object o) {

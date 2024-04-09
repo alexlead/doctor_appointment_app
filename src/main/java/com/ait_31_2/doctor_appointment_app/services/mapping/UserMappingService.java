@@ -12,13 +12,24 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+
+/**
+ * Service class for mapping user entities to DTOs and vice versa.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserMappingService {
-
+    /**
+     * The BCrypt password encoder used for encoding passwords.
+     */
     private final BCryptPasswordEncoder encoder;
 
-
+    /**
+     * Maps a user entity to a DTO for user view.
+     *
+     * @param user The {@link User} entity to map.
+     * @return A  {@link UserDto} for user view.
+     */
     public UserDto mapUserToDto(User user) {
         int id = user.getId();
         String name = user.getName();
@@ -28,7 +39,12 @@ public class UserMappingService {
         return new UserDto(id, name, surname, username, roles);
 
     }
-
+    /**
+     * Maps a user entity to a DTO for user view, including user ID,  Name and  Surname.
+     *
+     * @param user The {@link User} entity to map.
+     * @return A  {@link UserDto} for user view.
+     */
     public UserDto mapUserToDtoName(User user) {
         int id = user.getId();
         String name = user.getName();
@@ -37,6 +53,13 @@ public class UserMappingService {
         return new UserDto(id, name, surname,null,null);
 
     }
+
+    /**
+     * Maps a {@link RegistrationForm} object to a User object.
+     *
+     * @param form The RegistrationForm object containing user registration data.
+     * @return The User object created from the registration form data.
+     */
     public User  mapRegistrationFormToUser(@Nonnull RegistrationForm form){
         User user = new User();
         user.setId(0);
@@ -53,10 +76,12 @@ public class UserMappingService {
 
 
     }
-
-
-
-
+    /**
+     * Maps a {@link UserDto} entity to a {@link User} for user view.
+     *
+     * @param dto The userDto to map.
+     * @return A  {@link User} for user view.
+     */
     public User mapUserDtoToEntityUser(UserDto dto) {
         User user = new User();
         user.setName(dto.getName());

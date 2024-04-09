@@ -5,13 +5,17 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+/**
+ * Registration Form for a new user.
+ * Contains basic information for registration, including ID, name, surname, username and password.
+ */
 @Data
 @Schema(
         description = "Registration form"
 )
 public class RegistrationForm {
     @Pattern(
-            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+            regexp = "[a-zа-я]{1,}",
             message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
     )
     @Schema(
@@ -20,7 +24,7 @@ public class RegistrationForm {
     private String name;
 
     @Pattern(
-            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+            regexp = "[a-zа-я]{1,}",
             message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
     )
     @Schema(

@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * A class describing the user (patient, doctor) of the application.
+ * Entity class representing the user (patient, doctor) of the application.
  * The {@link UserService} class is designed to work with users.
  * @author Tetiana
  * @version 1.1.0

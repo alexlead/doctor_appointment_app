@@ -38,7 +38,7 @@ public class UserController {
      *
      * @param form     RegistrationForm object containing user registration data.
      * @param response HttpServletResponse object used to set authentication cookie.
-     * @return ResponseEntity<TokenResponseDto> containing access token for the newly registered user.
+     * @return ResponseEntity {@link TokenResponseDto} containing access token for the newly registered user.
      */
     @PostMapping("/registration")
     @Operation(
@@ -67,7 +67,7 @@ public class UserController {
      */
     @GetMapping("/")
     @Operation(
-            summary = "List of users",
+            summary = "Get list of all users",
             description = "View list of all users. Available to administration."
     )
     public List<UserDto> getAll() {
@@ -81,7 +81,7 @@ public class UserController {
      */
     @GetMapping("/doctors/")
     @Operation(
-            summary = "Doctors",
+            summary = "Get list of all doctors",
             description = "View list of all doctors. Available to all users."
     )
     public List<UserDto> getAllDoctors() {
@@ -95,7 +95,7 @@ public class UserController {
      */
     @GetMapping("/doctorslist/")
     @Operation(
-            summary = "All Doctors with Photo",
+            summary = "Get list of all doctors with photo",
             description = "View list of all doctors. Available to all users."
     )
     public List<DoctorDto> getAllDoctorsWithPhoto() {
@@ -110,7 +110,7 @@ public class UserController {
      */
     @GetMapping("/doctor/{id}")
     @Operation(
-            summary = "Find doctor",
+            summary = "Get doctor by ID",
             description = "Search for a doctor by id. Available to registered patients and administration."
     )
     public UserDto getDoctor(
@@ -127,7 +127,7 @@ public class UserController {
      */
     @GetMapping("/patient/{partName}")
     @Operation(
-            summary = "Find patient",
+            summary = "Get patients by the first letters of their name ",
             description = "Search for a patient by first letter of name. Available to doctors."
     )
     public List<UserDto> getPatient(@PathVariable String partName) {
@@ -142,7 +142,7 @@ public class UserController {
      */
     @GetMapping("/{userid}")
     @Operation(
-            summary = "Find user",
+            summary = "Get user by ID",
             description = "Search for a user by id. Available to administration."
     )
     public UserDto getById(@PathVariable int userid) {

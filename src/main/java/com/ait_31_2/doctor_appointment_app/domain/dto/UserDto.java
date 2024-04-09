@@ -2,20 +2,39 @@ package com.ait_31_2.doctor_appointment_app.domain.dto;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
 import java.util.Set;
-
+/**
+ * DTO class representing a user.
+ * Contains basic information about a user, including ID, name, surname, username, and roles.
+ */
+@Schema(description = "DTO class representing a user")
 public class UserDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(description = "The ID of the user")
     private int id;
+    @Schema(description = "The name of the user")
     private String name;
+    @Schema(description = "The surname of the user")
     private String surname;
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(description = "The username(email) of the user")
     private String username;
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(description = "The roles assigned to the user")
     private Set<Role> roles;
 
+    /**
+     * Constructs a new UserDto object with the specified parameters.
+     *
+     * @param id       the ID of the user
+     * @param name     the name of the user
+     * @param surname  the surname of the user
+     * @param username the username of the user
+     * @param roles    the roles assigned to the user
+     */
     public UserDto(int id, String name, String surname, String username, Set<Role> roles) {
         this.id = id;
         this.name = name;

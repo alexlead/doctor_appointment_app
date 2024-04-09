@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Represents authentication information for a user.
+ */
 public class AuthInfo implements Authentication {
 
     private boolean authenticated;
@@ -17,7 +20,14 @@ public class AuthInfo implements Authentication {
 
     private Set<Role> roles;
 
-
+    /**
+     * Constructs a new AuthInfo object with the specified authentication details.
+     *
+     * @param username The username of the authenticated user.
+     * @param name     The first name of the authenticated user.
+     * @param surname  The surname of the authenticated user.
+     * @param roles    The roles assigned to the authenticated user.
+     */
     public AuthInfo(String username, String name, String surname, Set<Role> roles) {
         this.username = username;
         this.name = name;

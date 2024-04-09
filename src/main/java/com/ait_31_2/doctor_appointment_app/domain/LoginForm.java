@@ -2,6 +2,11 @@ package com.ait_31_2.doctor_appointment_app.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Objects;
+/**
+        * Form fot authentication.
+        * Contains basic information for authentication, including username and password.
+        */
 @Schema(
         description = "Login form"
 )
@@ -38,5 +43,25 @@ public class LoginForm {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LoginForm loginForm)) return false;
+        return Objects.equals(getUsername(), loginForm.getUsername()) && Objects.equals(getPassword(), loginForm.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUsername(), getPassword());
+    }
+
+    @Override
+    public String toString() {
+        return "LoginForm{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
