@@ -1,0 +1,16 @@
+com.ait_31_2.doctor_appointment_app
+com.ait_31_2.doctor_appointment_app.config
+com.ait_31_2.doctor_appointment_app.controllers
+com.ait_31_2.doctor_appointment_app.domain
+com.ait_31_2.doctor_appointment_app.domain.classes
+com.ait_31_2.doctor_appointment_app.domain.dto
+com.ait_31_2.doctor_appointment_app.domain.interfaces
+com.ait_31_2.doctor_appointment_app.exception_handling
+com.ait_31_2.doctor_appointment_app.exception_handling.exceptions
+com.ait_31_2.doctor_appointment_app.repositories
+com.ait_31_2.doctor_appointment_app.security.security_controller
+com.ait_31_2.doctor_appointment_app.security.security_dto
+com.ait_31_2.doctor_appointment_app.security.security_filter
+com.ait_31_2.doctor_appointment_app.security.security_service
+com.ait_31_2.doctor_appointment_app.services
+com.ait_31_2.doctor_appointment_app.services.mapping
