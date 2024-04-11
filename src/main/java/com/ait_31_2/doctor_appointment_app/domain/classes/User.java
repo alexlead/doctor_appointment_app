@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,10 +41,11 @@ public class User implements UserDetails {
 
     @Column(name = "name")
     @NotNull
-    @Pattern(
-            regexp = "[A-ZА-Я][a-zа-я]{1,}",
-            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
-    )
+    @NotEmpty
+//    @Pattern(
+//            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+//            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
+//    )
     @Schema(
             description = "User`s name",
             example = "Ivan")
@@ -51,10 +53,11 @@ public class User implements UserDetails {
 
     @Column(name = "surname")
     @NotNull
-    @Pattern(
-            regexp = "[A-ZА-Я][a-zа-я]{1,}",
-            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
-    )
+    @NotEmpty
+//    @Pattern(
+//            regexp = "[A-ZА-Я][a-zа-я]{1,}",
+//            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
+//    )
     @Schema(
             description = "User`s surname",
             example = "Ivanov")

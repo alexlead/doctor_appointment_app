@@ -2,6 +2,7 @@ package com.ait_31_2.doctor_appointment_app.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -14,19 +15,21 @@ import lombok.Data;
         description = "Registration form"
 )
 public class RegistrationForm {
-    @Pattern(
-            regexp = "[a-zа-я]{1,}",
-            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
-    )
+//    @Pattern(
+//            regexp = "[a-zа-я]{1,}",
+//            message = "The name must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
+//    )
+    @NotEmpty
     @Schema(
             description = "User`s name",
             example = "Ivan")
     private String name;
 
-    @Pattern(
-            regexp = "[a-zа-я]{1,}",
-            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
-    )
+//    @Pattern(
+//            regexp = "[a-zа-я]{1,}",
+//            message = "The surname must begin with a capital letter and contain at least 2 more lowercase letters and can only contain letters."
+//    )
+    @NotEmpty
     @Schema(
             description = "User`s surname",
             example = "Ivanov")

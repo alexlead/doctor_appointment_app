@@ -57,7 +57,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query(value = "SELECT  appointment.*, slot.time_start, slot.time_end, user.name, user.surname FROM appointment" +
             "        JOIN  slot ON appointment.slot_id = slot.id JOIN " +
             "        user ON appointment.doctor_id = user.id WHERE (  appointment.patient_id =:patientId)" +
-            "        AND (appointment.date > CURRENT_DATE())  OR (appointment.date = CURRENT_DATE() AND slot.time_end >= CURRENT_TIME())" +
+            "        AND (appointment.date > CURRENT_DATE()  OR (appointment.date = CURRENT_DATE() AND slot.time_end >= CURRENT_TIME()))" +
             "        order by appointment.date asc limit 2;", nativeQuery = true)
     List<Appointment> findFutureAppointmentsPatient(@Param("patientId") int patientId);
 
@@ -70,7 +70,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query(value = "SELECT  appointment.*, slot.time_start, slot.time_end, user.name, user.surname FROM appointment" +
             "        JOIN  slot ON appointment.slot_id = slot.id JOIN " +
             "        user ON appointment.patient_id = user.id WHERE (  appointment.doctor_id =:doctorId)" +
-            "        AND (appointment.date > CURRENT_DATE())  OR (appointment.date = CURRENT_DATE() AND slot.time_end >= CURRENT_TIME())" +
+            "        AND (appointment.date > CURRENT_DATE()  OR (appointment.date = CURRENT_DATE() AND slot.time_end >= CURRENT_TIME()))" +
             "        order by appointment.date asc limit 4;", nativeQuery = true)
     List<Appointment> findFutureAppointmentsDoctor(@Param("doctorId") int doctorId);
 
