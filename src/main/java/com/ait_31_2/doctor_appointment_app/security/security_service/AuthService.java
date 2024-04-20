@@ -2,18 +2,19 @@ package com.ait_31_2.doctor_appointment_app.security.security_service;
 
 import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
+import com.ait_31_2.doctor_appointment_app.security.repositories.RefreshTokenRepository;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.AuthInfo;
+import com.ait_31_2.doctor_appointment_app.security.security_dto.RefreshToken;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
 import com.ait_31_2.doctor_appointment_app.services.UserService;
-import io.jsonwebtoken.Claims;
 import jakarta.annotation.Nonnull;
 import jakarta.security.auth.message.AuthException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 /**
  * Service class for managing user authentication.
@@ -23,8 +24,10 @@ import java.util.Map;
 public class AuthService {
     private UserService userService;
     private TokenService tokenService;
-    private Map<String, String> refreshStorage;
+
     private BCryptPasswordEncoder encoder;
+
+    private RefreshTokenRepository tokenRepository;
 
     /**
      * Constructs an instance of AuthService with the specified dependencies.
@@ -33,11 +36,13 @@ public class AuthService {
      * @param tokenService The {@link TokenService} instance for token generation and validation.
      * @param encoder      The BCryptPasswordEncoder instance for password encoding and validation.
      */
-    public AuthService(UserService userService, TokenService tokenService, BCryptPasswordEncoder encoder) {
+
+    public AuthService(UserService userService, TokenService tokenService,
+                       BCryptPasswordEncoder encoder, RefreshTokenRepository tokenRepository) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.encoder = encoder;
-        this.refreshStorage = new HashMap<>();
+        this.tokenRepository = tokenRepository;
     }
 
     /**
@@ -54,9 +59,9 @@ public class AuthService {
 
         if (encoder.matches(inboundUser.getPassword(), foundUser.getPassword())) {
             String accessToken = tokenService.generateAccessToken(foundUser);
-            String refreshToken = tokenService.generateRefreshToken(foundUser);
-            refreshStorage.put(username, refreshToken);
-            return new TokenResponseDto(accessToken, refreshToken, "OK");
+            RefreshToken refreshToken = tokenService.generateRefreshToken(foundUser);
+
+            return new TokenResponseDto(accessToken, refreshToken.getToken(), "OK");
         } else {
             throw new AuthException("Password is incorrect");
         }
@@ -70,16 +75,19 @@ public class AuthService {
      * @return A {@link TokenResponseDto} containing the new access token.
      */
     public TokenResponseDto getAccessToken(@Nonnull String refreshToken) {
-        if (tokenService.validateRefreshToken(refreshToken)) {
-            Claims refreshClaims = tokenService.getRefreshClaims(refreshToken);
-            String username = refreshClaims.getSubject();
-            String savedRefreshToken = refreshStorage.get(username);
+        Optional<RefreshToken> optionalRefreshToken = tokenRepository.findByToken(refreshToken);
+        if (optionalRefreshToken.isPresent()) {
+            RefreshToken storedRefreshToken = optionalRefreshToken.get();
+            if (tokenService.validateRefreshToken(refreshToken)) {
+                String username = storedRefreshToken.getUser().getUsername();
 
-            if (savedRefreshToken != null && savedRefreshToken.equals(refreshToken)) {
-                User user = (User) userService.loadUserByUsername(username);
-                String accessToken = tokenService.generateAccessToken(user);
-                return new TokenResponseDto(accessToken, null);
+                if (storedRefreshToken.getToken().equals(refreshToken)) {
+                    User user = (User) userService.loadUserByUsername(username);
+                    String accessToken = tokenService.generateAccessToken(user);
+                    return new TokenResponseDto(accessToken, null);
+                }
             }
+
         }
         return new TokenResponseDto(null, null);
     }

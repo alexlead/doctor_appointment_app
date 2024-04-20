@@ -2,13 +2,17 @@ package com.ait_31_2.doctor_appointment_app.security.security_service;
 
 import com.ait_31_2.doctor_appointment_app.domain.classes.Role;
 import com.ait_31_2.doctor_appointment_app.domain.classes.User;
+import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.TokenRefreshException;
 import com.ait_31_2.doctor_appointment_app.repositories.RoleRepository;
+import com.ait_31_2.doctor_appointment_app.security.repositories.RefreshTokenRepository;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.AuthInfo;
+import com.ait_31_2.doctor_appointment_app.security.security_dto.RefreshToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,8 @@ public class TokenService {
     private SecretKey accessKey;
     private SecretKey refreshKey;
     private RoleRepository roleRepository;
+    @Autowired
+    private RefreshTokenRepository tokenRepository;
 
     /**
      * Constructs an instance of TokenService with the specified dependencies.
@@ -36,10 +42,12 @@ public class TokenService {
      * @param roleRepository The {@link RoleRepository} instance for retrieving user roles.
      */
     public TokenService(@Value("${access.key}") String accessKey,
-                        @Value("${refresh.key}") String refreshKey, RoleRepository roleRepository) {
+                        @Value("${refresh.key}") String refreshKey,
+                        RoleRepository roleRepository) {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessKey));
         this.refreshKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(refreshKey));
         this.roleRepository = roleRepository;
+
     }
 
     /**
@@ -50,7 +58,7 @@ public class TokenService {
      */
     public String generateAccessToken(@Nonnull User user) {
         LocalDateTime currentDate = LocalDateTime.now();
-        Instant expirationInstant = currentDate.plusDays(1).atZone(ZoneId.systemDefault()).toInstant();
+        Instant expirationInstant = currentDate.plusHours(1).atZone(ZoneId.systemDefault()).toInstant();
         Date expirationDate = Date.from(expirationInstant);
 
         return Jwts.builder()
@@ -70,16 +78,20 @@ public class TokenService {
      * @param user The {@link User} for whom the refresh token is generated.
      * @return The generated refresh token.
      */
-    public String generateRefreshToken(@Nonnull User user) {
+    public RefreshToken generateRefreshToken(@Nonnull User user) {
         LocalDateTime currentDate = LocalDateTime.now();
-        Instant expirationInstant = currentDate.plusDays(14).atZone(ZoneId.systemDefault()).toInstant();
+        Instant expirationInstant = currentDate.plusDays(7).atZone(ZoneId.systemDefault()).toInstant();
         Date expirationDate = Date.from(expirationInstant);
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .subject(user.getUsername())
                 .expiration(expirationDate)
                 .signWith(refreshKey)
                 .compact();
+
+        RefreshToken refreshToken = new RefreshToken(user, token, expirationInstant);
+        return tokenRepository.save(refreshToken);
+
     }
 
     /**
@@ -99,7 +111,13 @@ public class TokenService {
      * @return True if the refresh token is valid, false otherwise.
      */
     public boolean validateRefreshToken(@Nonnull String refreshToken) {
-        return validateToken(refreshToken, refreshKey);
+
+        if (!(validateToken(refreshToken, refreshKey))) {
+            tokenRepository.findByToken(refreshToken)
+                    .ifPresent(tokenRepository::delete);
+            throw new TokenRefreshException("Refresh token was expired. Please make a new signin request");
+        }
+        return true;
     }
 
     /**

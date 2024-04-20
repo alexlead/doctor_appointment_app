@@ -8,6 +8,7 @@ import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.DoctorN
 import com.ait_31_2.doctor_appointment_app.exception_handling.exceptions.UserAlreadyExistsException;
 import com.ait_31_2.doctor_appointment_app.repositories.UserMetaRepository;
 import com.ait_31_2.doctor_appointment_app.repositories.UserRepository;
+import com.ait_31_2.doctor_appointment_app.security.security_dto.RefreshToken;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
 import com.ait_31_2.doctor_appointment_app.security.security_service.TokenService;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
@@ -75,11 +76,11 @@ public class UserService implements UserDetailsService {
         }
         User user = mapping.mapRegistrationFormToUser(form);
         User newUser = repository.save(user);
-        String username = newUser.getUsername();
+
         String accessToken = tokenService.generateAccessToken(newUser);
-        String refreshToken = tokenService.generateRefreshToken(newUser);
-        refreshStorage.put(username, refreshToken);
-        return new TokenResponseDto(accessToken, refreshToken,
+        RefreshToken refreshToken = tokenService.generateRefreshToken(newUser);
+
+        return new TokenResponseDto(accessToken, refreshToken.getToken(),
                 "User " + newUser.getName() + " " + newUser.getSurname() + " successfully registered!");
 
 

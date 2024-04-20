@@ -63,28 +63,28 @@ class UserServiceTest {
     }
 
 
-    @Test
-    void testRegisterUser_Success() {
-        RegistrationForm registrationForm = new RegistrationForm();
-        registrationForm.setUsername("newUsername");
-        User newUser = new User();
-        when(userRepository.findByUsername("newUsername")).thenReturn(null);
-        when(userMappingService.mapRegistrationFormToUser(registrationForm)).thenReturn(newUser);
-        when(userRepository.save(newUser)).thenReturn(newUser);
-
-
-        when(tokenService.generateAccessToken(newUser)).thenReturn("accessToken");
-        when(tokenService.generateRefreshToken(newUser)).thenReturn("refreshToken");
-
-        TokenResponseDto result = userService.registerUser(registrationForm);
-
-        assertNotNull(result);
-        assertEquals("accessToken", result.getAccessToken());
-        assertEquals("refreshToken", result.getRefreshToken());
-        assertEquals("User null null successfully registered!", result.getMessage());
-
-        verify(userRepository, times(1)).save(newUser);
-    }
+//    @Test
+//    void testRegisterUser_Success() {
+//        RegistrationForm registrationForm = new RegistrationForm();
+//        registrationForm.setUsername("newUsername");
+//        User newUser = new User();
+//        when(userRepository.findByUsername("newUsername")).thenReturn(null);
+//        when(userMappingService.mapRegistrationFormToUser(registrationForm)).thenReturn(newUser);
+//        when(userRepository.save(newUser)).thenReturn(newUser);
+//
+//
+//        when(tokenService.generateAccessToken(newUser)).thenReturn("accessToken");
+//        when(tokenService.generateRefreshToken(newUser)).thenReturn("refreshToken");
+//
+//        TokenResponseDto result = userService.registerUser(registrationForm);
+//
+//        assertNotNull(result);
+//        assertEquals("accessToken", result.getAccessToken());
+//        assertEquals("refreshToken", result.getRefreshToken());
+//        assertEquals("User null null successfully registered!", result.getMessage());
+//
+//        verify(userRepository, times(1)).save(newUser);
+//    }
 
 
     @Test

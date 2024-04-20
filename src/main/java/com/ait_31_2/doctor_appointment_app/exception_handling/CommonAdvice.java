@@ -117,4 +117,12 @@ public class CommonAdvice {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TokenRefreshException.class)
+    public ResponseEntity<Response> handleException(TokenRefreshException e) {
+        e.printStackTrace();
+        Response response = new Response("ERROR",e.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

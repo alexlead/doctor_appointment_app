@@ -1,7 +1,7 @@
 package com.ait_31_2.doctor_appointment_app.security.security_controller;
 
 import com.ait_31_2.doctor_appointment_app.domain.LoginForm;
-import com.ait_31_2.doctor_appointment_app.security.security_dto.RefreshRequestDto;
+import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenRefreshRequest;
 import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDto;
 import com.ait_31_2.doctor_appointment_app.security.security_service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,12 +67,11 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/refresh")
-//
-//    public ResponseEntity<TokenResponseDto> getNewRefreshToken(@RequestBody RefreshRequestDto request) {
-//        TokenResponseDto accessToken = service.getAccessToken(request.getRefreshToken());
-//        return ResponseEntity.ok(accessToken);
-//    }
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponseDto> getNewRefreshToken(@RequestBody TokenRefreshRequest request) {
+        TokenResponseDto accessToken = service.getAccessToken(request.getRefreshToken());
+        return ResponseEntity.ok(accessToken);
+    }
 
 
     /**
