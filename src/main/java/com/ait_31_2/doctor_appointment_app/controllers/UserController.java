@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,19 +46,25 @@ public class UserController {
             summary = "Registration",
             description = "Registration in app 'Doctor appointment system'. Available to all users."
     )
-    public ResponseEntity<TokenResponseDto> register(
+    public ResponseEntity<String> register(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User`s object")
-            RegistrationForm form, HttpServletResponse response
+            RegistrationForm form, HttpServletResponse response, HttpServletRequest request
             ){
-        TokenResponseDto tokenDto = service.registerUser(form);
+        TokenResponseDto tokenDto = service.registerUser(form, request);
 
-        Cookie cookie = new Cookie("Access-Token", tokenDto.getAccessToken());
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
+        Cookie accessTokenCookie = new Cookie("Access-Token", tokenDto.getAccessToken());
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setHttpOnly(true);
+        response.addCookie(accessTokenCookie);
 
-        return ResponseEntity.ok(tokenDto);
+        Cookie refreshTokenCookie = new Cookie("refreshToken", tokenDto.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setPath("/");
+        response.addCookie(refreshTokenCookie);
+
+        return ResponseEntity.ok(tokenDto.getMessage());
     }
 
     /**

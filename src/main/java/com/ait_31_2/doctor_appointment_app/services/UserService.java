@@ -13,6 +13,8 @@ import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDt
 import com.ait_31_2.doctor_appointment_app.security.security_service.TokenService;
 import com.ait_31_2.doctor_appointment_app.services.mapping.UserMappingService;
 import jakarta.persistence.Tuple;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -69,7 +71,7 @@ public class UserService implements UserDetailsService {
      * @throws UserAlreadyExistsException if a user with the same username already exists
      */
     @Transactional
-    public TokenResponseDto registerUser(RegistrationForm form) {
+    public TokenResponseDto registerUser(RegistrationForm form, HttpServletRequest request) {
         User foundUser = repository.findByUsername(form.getUsername());
         if (foundUser != null) {
             throw new UserAlreadyExistsException("User with this name already exists!");
@@ -77,10 +79,10 @@ public class UserService implements UserDetailsService {
         User user = mapping.mapRegistrationFormToUser(form);
         User newUser = repository.save(user);
 
-        String accessToken = tokenService.generateAccessToken(newUser);
-        RefreshToken refreshToken = tokenService.generateRefreshToken(newUser);
+        String accessToken = tokenService.generateAccessToken(newUser, request);
+        RefreshToken refreshToken = tokenService.generateRefreshToken(newUser, request);
 
-        return new TokenResponseDto(accessToken, refreshToken.getToken(),
+        return new TokenResponseDto(accessToken,refreshToken.getToken() ,
                 "User " + newUser.getName() + " " + newUser.getSurname() + " successfully registered!");
 
 

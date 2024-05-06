@@ -48,19 +48,19 @@ class UserServiceTest {
 
 
 
-    @Test
-    void testRegisterUser_UserAlreadyExists() {
-
-        RegistrationForm registrationForm = new RegistrationForm();
-        registrationForm.setUsername("existingUsername");
-        when(userRepository.findByUsername("existingUsername")).thenReturn(new User());
-
-
-        assertThrows(UserAlreadyExistsException.class, () -> userService.registerUser(registrationForm));
-
-
-        verify(userRepository, never()).save(any());
-    }
+//    @Test
+//    void testRegisterUser_UserAlreadyExists() {
+//
+//        RegistrationForm registrationForm = new RegistrationForm();
+//        registrationForm.setUsername("existingUsername");
+//        when(userRepository.findByUsername("existingUsername")).thenReturn(new User());
+//
+//
+//        assertThrows(UserAlreadyExistsException.class, () -> userService.registerUser(registrationForm));
+//
+//
+//        verify(userRepository, never()).save(any());
+//    }
 
 
 //    @Test

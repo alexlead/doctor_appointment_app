@@ -46,30 +46,37 @@ public class AuthController {
             summary = "Authentication",
             description = "Login in app 'Doctor appointment system'. Available to all users."
     )
-    public ResponseEntity<TokenResponseDto> login(@RequestBody LoginForm loginForm, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody LoginForm loginForm, HttpServletResponse response, HttpServletRequest request) {
         Cookie cookie = new Cookie("Access-Token", null);
         cookie.setPath("/api");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         try {
-            TokenResponseDto tokenDto = service.login(loginForm);
+            TokenResponseDto tokenDto = service.login(loginForm, request);
 
-            cookie = new Cookie("Access-Token", tokenDto.getAccessToken());
-            cookie.setPath("/");
-            cookie.setHttpOnly(true);
-            response.addCookie(cookie);
+            Cookie accessTokenCookie = new Cookie("Access-Token", tokenDto.getAccessToken());
+            accessTokenCookie.setPath("/");
+            accessTokenCookie.setHttpOnly(true);
+            response.addCookie(accessTokenCookie);
 
-            return ResponseEntity.ok(tokenDto);
+            //  HTTP-only cookie
+            Cookie refreshTokenCookie = new Cookie("refreshToken", tokenDto.getRefreshToken());
+            refreshTokenCookie.setHttpOnly(true);
+            refreshTokenCookie.setSecure(true);
+            refreshTokenCookie.setPath("/");
+            response.addCookie(refreshTokenCookie);
+
+            return ResponseEntity.ok(tokenDto.getMessage());
         } catch (AuthException e) {
             TokenResponseDto tokenDto = new TokenResponseDto(e.getMessage());
-            return new ResponseEntity<>(tokenDto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(tokenDto.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDto> getNewRefreshToken(@RequestBody TokenRefreshRequest request) {
-        TokenResponseDto accessToken = service.getAccessToken(request.getRefreshToken());
+    public ResponseEntity<TokenResponseDto> getNewAccessToken(@RequestBody TokenRefreshRequest request, HttpServletRequest httpRequest) {
+        TokenResponseDto accessToken = service.getAccessToken(request.getRefreshToken(),httpRequest);
         return ResponseEntity.ok(accessToken);
     }
 

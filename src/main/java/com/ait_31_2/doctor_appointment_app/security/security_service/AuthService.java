@@ -9,7 +9,8 @@ import com.ait_31_2.doctor_appointment_app.security.security_dto.TokenResponseDt
 import com.ait_31_2.doctor_appointment_app.services.UserService;
 import jakarta.annotation.Nonnull;
 import jakarta.security.auth.message.AuthException;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,13 +54,13 @@ public class AuthService {
      * @return A TokenResponseDto containing the generated access token and refresh token.
      * @throws AuthException If the provided password is incorrect.
      */
-    public TokenResponseDto login(@Nonnull LoginForm inboundUser) throws AuthException {
+    public TokenResponseDto login(@Nonnull LoginForm inboundUser, HttpServletRequest request) throws AuthException {
         String username = inboundUser.getUsername();
         User foundUser = (User) userService.loadUserByUsername(username);
 
         if (encoder.matches(inboundUser.getPassword(), foundUser.getPassword())) {
-            String accessToken = tokenService.generateAccessToken(foundUser);
-            RefreshToken refreshToken = tokenService.generateRefreshToken(foundUser);
+            String accessToken = tokenService.generateAccessToken(foundUser,request);
+            RefreshToken refreshToken = tokenService.generateRefreshToken(foundUser, request);
 
             return new TokenResponseDto(accessToken, refreshToken.getToken(), "OK");
         } else {
@@ -74,7 +75,7 @@ public class AuthService {
      * @param refreshToken The refresh token used to generate a new access token.
      * @return A {@link TokenResponseDto} containing the new access token.
      */
-    public TokenResponseDto getAccessToken(@Nonnull String refreshToken) {
+    public TokenResponseDto getAccessToken(@Nonnull String refreshToken, HttpServletRequest request) {
         Optional<RefreshToken> optionalRefreshToken = tokenRepository.findByToken(refreshToken);
         if (optionalRefreshToken.isPresent()) {
             RefreshToken storedRefreshToken = optionalRefreshToken.get();
@@ -83,7 +84,7 @@ public class AuthService {
 
                 if (storedRefreshToken.getToken().equals(refreshToken)) {
                     User user = (User) userService.loadUserByUsername(username);
-                    String accessToken = tokenService.generateAccessToken(user);
+                    String accessToken = tokenService.generateAccessToken(user, request);
                     return new TokenResponseDto(accessToken, null);
                 }
             }

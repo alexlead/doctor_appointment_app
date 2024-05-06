@@ -12,8 +12,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.Nonnull;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -33,6 +36,10 @@ public class TokenService {
     private RoleRepository roleRepository;
     @Autowired
     private RefreshTokenRepository tokenRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+
 
     /**
      * Constructs an instance of TokenService with the specified dependencies.
@@ -56,7 +63,10 @@ public class TokenService {
      * @param user The {@link User} for whom the access token is generated.
      * @return The generated access token.
      */
-    public String generateAccessToken(@Nonnull User user) {
+    @Transactional
+    public String generateAccessToken(@Nonnull User user, HttpServletRequest request ) {
+        String fingerprint = generateBrowserFingerprint(request);
+
         LocalDateTime currentDate = LocalDateTime.now();
         Instant expirationInstant = currentDate.plusMinutes(10).atZone(ZoneId.systemDefault()).toInstant();
         Date expirationDate = Date.from(expirationInstant);
@@ -69,6 +79,7 @@ public class TokenService {
                 .claim("username", user.getUsername())
                 .claim("name", user.getName())
                 .claim("surname", user.getSurname())
+                .claim("fingerprint", fingerprint)
                 .compact();
     }
 
@@ -78,7 +89,7 @@ public class TokenService {
      * @param user The {@link User} for whom the refresh token is generated.
      * @return The generated refresh token.
      */
-    public RefreshToken generateRefreshToken(@Nonnull User user) {
+    public RefreshToken generateRefreshToken(@Nonnull User user, HttpServletRequest request) {
         LocalDateTime currentDate = LocalDateTime.now();
         Instant expirationInstant = currentDate.plusMonths(1).atZone(ZoneId.systemDefault()).toInstant();
         Date expirationDate = Date.from(expirationInstant);
@@ -88,10 +99,27 @@ public class TokenService {
                 .expiration(expirationDate)
                 .signWith(refreshKey)
                 .compact();
+        String fingerprint = generateBrowserFingerprint(request);
 
-        RefreshToken refreshToken = new RefreshToken(user, token, expirationInstant);
+        RefreshToken refreshToken = new RefreshToken(user, token, expirationInstant,fingerprint);
         return tokenRepository.save(refreshToken);
 
+    }
+
+    private String generateBrowserFingerprint(HttpServletRequest request) {
+
+        if (request == null) {
+            throw new IllegalStateException("HttpServletRequest not set in ThreadLocal");
+        }
+
+        String userAgent = request.getHeader("User-Agent");
+        String ipAddress = request.getRemoteAddr();
+        String resolution = request.getParameter("resolution"); //AJAX-запрос
+        String language = request.getParameter("language"); // AJAX-запрос
+
+        String combinedCharacteristics = userAgent + ipAddress + resolution + language;
+
+        return encoder.encode(combinedCharacteristics);
     }
 
     /**

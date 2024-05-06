@@ -32,10 +32,7 @@ public class SecurityConfig {
         this.filter = filter;
     }
 
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
 
     @Bean

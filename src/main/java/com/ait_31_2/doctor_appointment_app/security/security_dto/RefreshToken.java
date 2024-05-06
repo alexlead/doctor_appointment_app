@@ -25,6 +25,8 @@ public class RefreshToken {
     private String token;
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;
+    @Column(name = "fingerprint", nullable = false)
+    private String fingerprint;
 
     public RefreshToken() {
     }
@@ -34,17 +36,19 @@ public class RefreshToken {
      *
      * @param refreshToken The refresh token.
      */
-    public RefreshToken(long id, User user, String refreshToken, Instant expiryDate) {
+    public RefreshToken(long id, User user, String refreshToken, Instant expiryDate, String fingerprint) {
         this.id = id;
         this.user = user;
         this.token = refreshToken;
         this.expiryDate = expiryDate;
+        this.fingerprint = fingerprint;
     }
 
-    public RefreshToken(User user, String refreshToken, Instant expiryDate) {
+    public RefreshToken(User user, String refreshToken, Instant expiryDate, String fingerprint) {
         this.user = user;
         this.token = refreshToken;
         this.expiryDate = expiryDate;
+        this.fingerprint = fingerprint;
     }
 
     public long getId() {
@@ -63,25 +67,30 @@ public class RefreshToken {
         return expiryDate;
     }
 
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RefreshToken that)) return false;
-        return getId() == that.getId() && Objects.equals(getUser(), that.getUser()) && Objects.equals(getToken(), that.getToken()) && Objects.equals(getExpiryDate(), that.getExpiryDate());
+        return getId() == that.getId() && Objects.equals(getUser(), that.getUser()) && Objects.equals(getToken(), that.getToken()) && Objects.equals(getExpiryDate(), that.getExpiryDate()) && Objects.equals(getFingerprint(), that.getFingerprint());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUser(), getToken(), getExpiryDate());
+        return Objects.hash(getId(), getUser(), getToken(), getExpiryDate(), getFingerprint());
     }
 
     @Override
     public String toString() {
-        return "RefreshRequestDto{" +
+        return "RefreshToken{" +
                 "id=" + id +
                 ", user=" + user +
-                ", refreshToken='" + token + '\'' +
+                ", token='" + token + '\'' +
                 ", expiryDate=" + expiryDate +
+                ", fingerprint='" + fingerprint + '\'' +
                 '}';
     }
 }
